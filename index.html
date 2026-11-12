@@ -326,7 +326,7 @@
     { id: "air",    title: "Air quality",     span: "span-7" },
     { id: "sun",    title: "Sun",             span: "span-6" },
     { id: "moon",   title: "Moon",            span: "span-6" },
-    { id: "tides",  title: "Tides",           span: "span-4" },
+    { id: "tides",  title: "Tides",           span: "span-6" },
     { id: "sky",    title: "Night sky",       span: "span-12" }
   ];
 
@@ -920,6 +920,7 @@
     return null;
   }
   const ftOrM = ft => state.units === "f" ? `${ft.toFixed(1)} ft` : `${(ft * 0.3048).toFixed(2)} m`;
+  const stationLabel = st => st.state && !/,\s*[A-Z.]{2,5}$/.test(st.name) ? `${st.name}, ${st.state}` : st.name;
   function wTides() {
     const td = state.tide, ev = td.events, now = Date.now();
     const upcoming = ev.filter(e => e.t > now).slice(0, 4);
@@ -946,7 +947,7 @@
         <div><b>${next.type === "H" ? "High" : "Low"} tide ${esc(fmtTime(new Date(next.t)))}</b> <span class="muted">in ${inTxt(next.t - now)}</span></div>
         <div class="tiny muted">${rising ? "Rising" : "Falling"}${level != null ? ", now " + ftOrM(level) : ""} · ${ftOrM(next.ft)} at ${next.type === "H" ? "high" : "low"}</div></div></div>
       ${chart}${rows}
-      <div class="tiny muted" style="margin-top:8px">${esc(st.name)}${st.state ? ", " + esc(st.state) : ""} · ${Math.round(st.km)} km away · NOAA</div>`;
+      <div class="tiny muted" style="margin-top:8px">${esc(stationLabel(st))} · ${Math.round(st.km)} km away · NOAA</div>`;
   }
   /* ---------- night sky ---------- */
   // Anchor = the constellation's easiest-to-find bright star or shape (RA hours, Dec degrees)
@@ -1277,7 +1278,7 @@
 
     if (tidesReady()) {
       const td = state.tide, up = td.events.filter(e => e.t > Date.now()).slice(0, 6);
-      out.push("TIDES", sub, `Station: ${td.station.name}${td.station.state ? ", " + td.station.state : ""} (NOAA ${td.station.id}, ${Math.round(td.station.km)} km away)`);
+      out.push("TIDES", sub, `Station: ${stationLabel(td.station)} (NOAA ${td.station.id}, ${Math.round(td.station.km)} km away)`);
       const lv = tideLevel(td.events, Date.now()); if (lv != null) out.push(`Now:     ${ftOrM(lv)}, ${up[0] && up[0].type === "H" ? "rising" : "falling"}`);
       up.forEach(e => out.push(`  ${e.type === "H" ? "High" : "Low "}  ${fmtTime(new Date(e.t)).padEnd(9)} ${ftOrM(e.ft)}`));
       out.push("Heights are above mean lower low water (MLLW).", "");
