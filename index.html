@@ -868,10 +868,33 @@
     const dark = astro.sunPosition(when, p.lat, p.lon).altitude <= -6;
     const vis = CONSTELLATIONS.map(c => ({ ...c, ...astro.starPosition(c.ra, c.dec, when, p.lat, p.lon) }))
       .filter(c => c.altitude > 12).sort((a, b) => b.altitude - a.altitude).slice(0, 8);
-    return { when, isNow, dark, vis, moon: astro.moonPosition(when, p.lat, p.lon), mIll: astro.moonIllumination(when) };
+    // constellations not shown yet that climb into view before dawn
+    const shown = new Set(vis.map(c => c.name)), rising = [], step = 10 * 60e3;
+    if (dark) {
+      for (const c of CONSTELLATIONS) {
+        if (shown.has(c.name)) continue;
+        let t = when.valueOf(), prevAlt = astro.starPosition(c.ra, c.dec, when, p.lat, p.lon).altitude, riseAt = null, riseAz = null;
+        if (prevAlt > 12) continue;                        // already up, just didn't make the top 8
+        for (let i = 0; i < 16 * 6; i++) {
+          t += step; const d = new Date(t);
+          if (astro.sunPosition(d, p.lat, p.lon).altitude > -12) break;   // dawn: stop looking
+          const pos = astro.starPosition(c.ra, c.dec, d, p.lat, p.lon);
+          if (prevAlt < 0 && pos.altitude >= 0 && !riseAt) { riseAt = d; riseAz = pos.azimuth; }
+          if (prevAlt < 12 && pos.altitude >= 12) { rising.push({ ...c, riseAt, riseAz: riseAz ?? pos.azimuth, goodAt: d }); break; }
+          prevAlt = pos.altitude;
+        }
+      }
+      rising.sort((a, b) => a.goodAt - b.goodAt);
+    }
+    return { when, isNow, dark, vis, rising: rising.slice(0, 5), moon: astro.moonPosition(when, p.lat, p.lon), mIll: astro.moonIllumination(when) };
   }
+  const risingLine = c => c.riseAt
+    ? `${c.name} rises in the ${dir16(c.riseAz)} around ${fmtTime(c.riseAt)} and is easy to see by ${fmtTime(c.goodAt)}.`
+    : `${c.name} climbs into good view in the ${dir16(c.riseAz)} around ${fmtTime(c.goodAt)}.`;
+  const risingHTML = list => !list.length ? "" : `<div class="pollen" style="margin-top:14px"><h2 style="margin-bottom:8px">Rising later tonight</h2>
+      ${list.map(c => `<div class="where" style="padding:3px 0">${esc(risingLine(c))}</div>`).join("")}</div>`;
   function wSky() {
-    const { when, isNow, dark, vis, moon, mIll } = skyData();
+    const { when, isNow, dark, vis, rising, moon, mIll } = skyData();
     if (!dark) {
       return `<div class="skeleton" style="color:var(--ink)"><b>No proper darkness tonight</b><br><span class="muted">At this time of year the sky here doesn't get dark enough to see the constellations well.</span></div>`;
     }
@@ -902,7 +925,7 @@
         <div class="tip">${esc(c.tip)}</div></div></div>`).join("") : `<div class="skeleton">None of the major constellations are well placed right then.</div>`;
     return `<div class="sky-wrap">
         <div>${map}<div class="tiny muted" style="text-align:center;margin-top:6px">Hold it overhead: north at the top, east on the left. The centre is straight up.</div></div>
-        <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div>${list}${moonNote}</div>
+        <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div>${list}${moonNote}${risingHTML(rising)}</div>
       </div>`;
   }
   const RENDER = { now: wNow, hourly: wHourly, daily: wDaily, air: wAir, sun: wSun, moon: wMoon, sky: wSky };
@@ -1133,6 +1156,7 @@
       out.push(...asciiSky(sk), "");
       sk.vis.forEach((c, i) => out.push(`${String(i + 1).padStart(2)}. ${c.name}`, `    Look ${dir16(c.azimuth)}, ${heightWord(c.altitude)} (altitude ${Math.round(c.altitude)}°, azimuth ${Math.round(c.azimuth)}°)`, `    ${c.tip}`));
       if (sk.moon.altitude > 0) out.push(` M. Moon: ${dir16(sk.moon.azimuth)}, ${heightWord(sk.moon.altitude)} (${Math.round(sk.mIll.fraction * 100)}% lit)`);
+      if (sk.rising.length) { out.push("", "Rising later tonight:"); sk.rising.forEach(c => out.push(`  - ${risingLine(c)}`)); }
       out.push("");
     }
 
