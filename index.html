@@ -1321,14 +1321,15 @@
   function reportFileName() {
     const p = zoneParts(new Date(), tz());
     const slug = state.place.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "location";
-    const base = `daylight-${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}-${slug}`;
+    // count every summary made that day, whatever city it's for
+    const base = `daylight-${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
     const n = (store.get("saves", {})[base] || 0) + 1;
-    return { base, name: `${base}-${String(n).padStart(2, "0")}.txt` };
+    return { base, name: `${base}-${String(n).padStart(2, "0")}-${slug}.txt` };
   }
   function countSave(base) {
     const saves = store.get("saves", {});
     saves[base] = (saves[base] || 0) + 1;
-    // keep only the 60 most recent day/place counters so storage doesn't grow forever
+    // keep only the 60 most recent day counters so storage doesn't grow forever
     const keys = Object.keys(saves).sort(); while (keys.length > 60) delete saves[keys.shift()];
     store.set("saves", saves);
   }
