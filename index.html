@@ -13,7 +13,7 @@
   :root {
     --sky1: #8ec5fc; --sky2: #e0c3fc;
     --ink: #1f2937; --ink-soft: #4b5563; --ink-faint: #6b7280;
-    --card: rgba(255,255,255,0.62); --card-border: rgba(255,255,255,0.75);
+    --card: rgba(255,255,255,0.80); --card-border: rgba(255,255,255,0.75);
     --line: rgba(31,41,55,0.10);
     --accent: #f59e0b;
     --shadow: 0 10px 30px rgba(30,41,59,0.10), 0 2px 6px rgba(30,41,59,0.06);
@@ -21,7 +21,7 @@
   }
   body.dark {
     --ink: #f1f5f9; --ink-soft: #cbd5e1; --ink-faint: #94a3b8;
-    --card: rgba(15,23,42,0.45); --card-border: rgba(255,255,255,0.10);
+    --card: rgba(15,23,42,0.68); --card-border: rgba(255,255,255,0.10);
     --line: rgba(255,255,255,0.10);
     --shadow: 0 10px 30px rgba(0,0,0,0.30), 0 2px 6px rgba(0,0,0,0.20);
   }
@@ -53,7 +53,6 @@
     display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
     background: var(--card); border: 1px solid var(--card-border); border-radius: 999px;
     padding: 9px 16px; font-weight: 600; box-shadow: var(--shadow);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   }
   .place-btn:hover { filter: brightness(1.04); }
   .place-btn svg { width: 16px; height: 16px; }
@@ -61,7 +60,6 @@
   .icon-btn {
     width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
     background: var(--card); border: 1px solid var(--card-border); box-shadow: var(--shadow);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   }
   .icon-btn svg { width: 19px; height: 19px; }
   .icon-btn.on { background: var(--ink); color: #fff; }
@@ -73,7 +71,6 @@
   form.search input {
     width: 100%; padding: 15px 20px 15px 50px; border-radius: 999px; font-size: 1.02rem;
     background: var(--card); border: 1px solid var(--card-border); box-shadow: var(--shadow); outline: none;
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   }
   form.search input::placeholder { color: var(--ink-faint); }
   form.search input:focus { border-color: var(--accent); }
@@ -84,7 +81,6 @@
   .card {
     background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius);
     box-shadow: var(--shadow); padding: 20px 22px; position: relative; min-width: 0;
-    backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2);
     transition: transform .25s ease, box-shadow .25s ease;
     
   }
@@ -121,7 +117,7 @@
   .now-cond { font-size: 1.12rem; font-weight: 600; margin-top: 6px; }
   .now-sub { font-size: .9rem; color: var(--ink-soft); margin-top: 2px; }
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
-  .stat { background: rgba(255,255,255,.35); border-radius: 14px; padding: 10px 12px; }
+  .stat { background: rgba(255,255,255,.55); border-radius: 14px; padding: 10px 12px; }
   body.dark .stat { background: rgba(255,255,255,.06); }
   .stat .k { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
   .stat .v { font-size: 1.05rem; font-weight: 600; margin-top: 3px; white-space: nowrap; }
@@ -169,7 +165,7 @@
   .moon-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 16px; }
 
   /* ---------- dialogs ---------- */
-  .scrim { position: fixed; inset: 0; background: rgba(15,23,42,.35); display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; z-index: 50; backdrop-filter: blur(3px); }
+  .scrim { position: fixed; inset: 0; background: rgba(15,23,42,.35); display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; z-index: 50; }
   .scrim.open { display: flex; }
   .panel {
     width: min(520px, 100%); background: #fff; color: #1f2937; border-radius: 22px; padding: 22px; box-shadow: 0 30px 80px rgba(0,0,0,.25);
