@@ -207,6 +207,15 @@
   .const-row b { font-weight: 700; }
   .const-row .where { color: var(--ink-soft); font-size: .9rem; }
   .const-row .tip { color: var(--ink-faint); font-size: .84rem; margin-top: 2px; }
+  .season { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .season-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: .9rem; }
+  .season-next { margin-left: auto; color: var(--ink-soft); }
+  .season-bar { margin-top: 7px; height: 6px; }
+  .season-bar span { background: linear-gradient(90deg, #f59e0b, #fb7185); }
+  .tide-next { display: flex; gap: 12px; align-items: center; }
+  .tide-arrow { width: 38px; height: 38px; border-radius: 50%; background: rgba(14,165,233,.14); color: #0284c7; display: grid; place-items: center; font-size: 1.2rem; font-weight: 700; flex: none; }
+  body.dark .tide-arrow { color: #7dd3fc; }
+  .tide-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; font-size: .88rem; padding: 5px 0; border-top: 1px solid var(--line); }
   footer { margin-top: 28px; text-align: center; font-size: .78rem; color: var(--ink-faint); }
   footer a { color: inherit; }
   .error { color: #b91c1c; font-size: .9rem; }
@@ -249,7 +258,7 @@
   <main class="grid" id="grid"></main>
 
   <footer>
-    Weather &amp; air quality data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0) &middot; Sun &amp; moon calculated in your browser
+    Weather &amp; air quality data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0) &middot; Tides by <a href="https://tidesandcurrents.noaa.gov/" target="_blank" rel="noopener">NOAA</a> &middot; Sun &amp; moon calculated in your browser
   </footer>
 </div>
 
@@ -317,6 +326,7 @@
     { id: "air",    title: "Air quality",     span: "span-7" },
     { id: "sun",    title: "Sun",             span: "span-6" },
     { id: "moon",   title: "Moon",            span: "span-6" },
+    { id: "tides",  title: "Tides",           span: "span-4" },
     { id: "sky",    title: "Night sky",       span: "span-12" }
   ];
 
@@ -332,10 +342,15 @@
     wx: store.get("wx", null),     // cached weather response
     aq: store.get("aq", null),     // cached air response
     fetchedAt: store.get("fetchedAt", 0),
+    tide: store.get("tide", null),
     error: null
   };
   // make sure any newly added widget ids appear in the order list
-  WIDGETS.forEach(w => { if (!state.order.includes(w.id)) state.order.push(w.id); });
+  WIDGETS.forEach((w, i) => {
+    if (state.order.includes(w.id)) return;
+    const prev = WIDGETS[i - 1] && state.order.indexOf(WIDGETS[i - 1].id);
+    if (prev != null && prev >= 0) state.order.splice(prev + 1, 0, w.id); else state.order.push(w.id);
+  });
   state.order = state.order.filter(id => WIDGETS.some(w => w.id === id));
 
   const $ = s => document.querySelector(s);
@@ -547,6 +562,7 @@
     if (aq.status === "fulfilled") { state.aq = aq.value; state.aq._key = key(p); store.set("aq", state.aq); }
     if (wx.status === "fulfilled") { state.fetchedAt = Date.now(); store.set("fetchedAt", state.fetchedAt); }
     renderAll();
+    loadTides().then(renderAll);
   }
   const key = p => `${(+p.lat).toFixed(3)},${(+p.lon).toFixed(3)}`;
   const wxReady = () => state.wx && state.wx._key === key(state.place);
@@ -599,6 +615,7 @@
     air: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h8"/></svg>`,
     sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 18a5 5 0 0 0-10 0M12 3v6M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4M23 22H1M8 6l4-4 4 4"/></svg>`,
     sky: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>`,
+    tides: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0M12 3v5M9.5 5.5L12 8l2.5-2.5"/></svg>`,
     moon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`
   };
   const waiting = () => `<div class="skeleton">${state.error ? `<span class="error">${esc(state.error)}</span>` : "Loading…"}</div>`;
@@ -729,6 +746,40 @@
       <div class="pollen"><h2 style="margin-bottom:8px">Pollen</h2>${pollen}</div>`;
   }
 
+
+  /* ---------- seasons ---------- */
+  function seasonMarks(year) {
+    const Y = (year - 2000) / 1000, jd = [
+      2451623.80984 + 365242.37404 * Y + 0.05169 * Y * Y - 0.00411 * Y ** 3 - 0.00057 * Y ** 4,
+      2451716.56767 + 365241.62603 * Y + 0.00325 * Y * Y + 0.00888 * Y ** 3 - 0.00030 * Y ** 4,
+      2451810.21715 + 365242.01767 * Y - 0.11575 * Y * Y + 0.00337 * Y ** 3 + 0.00078 * Y ** 4,
+      2451900.05952 + 365242.74049 * Y - 0.06223 * Y * Y - 0.00823 * Y ** 3 + 0.00032 * Y ** 4];
+    return jd.map(j => new Date((j - 2440587.5) * 864e5));   // Mar equinox, Jun solstice, Sep equinox, Dec solstice
+  }
+  function seasonInfo(now, lat) {
+    const y = now.getUTCFullYear();
+    const marks = [...seasonMarks(y - 1), ...seasonMarks(y), ...seasonMarks(y + 1)];
+    const i = marks.findIndex(m => m > now), start = marks[i - 1], next = marks[i];
+    const north = lat >= 0, k = (i - 1) % 4;                   // index of the season that just began
+    const NAMES_N = ["Spring", "Summer", "Autumn", "Winter"], NAMES_S = ["Autumn", "Winter", "Spring", "Summer"];
+    const EVENTS = ["March equinox", "June solstice", "September equinox", "December solstice"];
+    const nextK = i % 4, nextSeason = (north ? NAMES_N : NAMES_S)[nextK];
+    const eventLabel = (nextK % 2 ? (nextSeason === "Summer" ? "Summer solstice" : "Winter solstice") : (nextSeason === "Spring" ? "Spring equinox" : "Autumn equinox"));
+    return { season: (north ? NAMES_N : NAMES_S)[k], frac: (now - start) / (next - start), next, eventLabel, event: EVENTS[nextK], days: Math.ceil((next - now) / 864e5), marks: marks.slice(4, 8) };
+  }
+  function dayLengthOn(date, p) { const t = astro.sunTimes(zoneDayInstant(date, tz(), 12), p.lat, p.lon); return t.sunrise ? t.sunset - t.sunrise : null; }
+  function seasonStrip() {
+    const p = state.place, now = new Date(), si = seasonInfo(now, p.lat);
+    const today = dayLengthOn(now, p), yest = dayLengthOn(new Date(now - 864e5), p);
+    const delta = today != null && yest != null ? Math.round((today - yest) / 1000) : null;
+    const trend = delta == null ? "" : `${delta >= 0 ? "Gaining" : "Losing"} ${Math.floor(Math.abs(delta) / 60) ? Math.floor(Math.abs(delta) / 60) + "m " : ""}${Math.abs(delta) % 60}s of daylight a day`;
+    const dayFmt = d => new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: tz() }).format(d);
+    return `<div class="season">
+        <div class="season-top"><b>${si.season}</b><span class="muted">${Math.round(si.frac * 100)}% through</span><span class="season-next">${esc(si.eventLabel)} · ${esc(dayFmt(si.next))}</span></div>
+        <div class="bar season-bar"><span style="width:${(si.frac * 100).toFixed(1)}%"></span></div>
+        <div class="tiny muted" style="margin-top:6px">${si.days} day${si.days === 1 ? "" : "s"} to go${trend ? " · " + esc(trend.toLowerCase()) : ""}</div>
+      </div>`;
+  }
   function wSun() {
     const p = state.place, now = new Date(), zone = tz();
     const noonToday = zoneDayInstant(now, zone, 12), noonYest = zoneDayInstant(now, zone, 12, -1);
@@ -739,9 +790,8 @@
     }
     const len = t.sunset - t.sunrise, lenY = ty.sunset && ty.sunrise ? ty.sunset - ty.sunrise : null;
     const diff = lenY == null ? null : Math.round((len - lenY) / 1000);
-    const diffTxt = diff == null ? "" : `${diff >= 0 ? "+" : "−"}${Math.floor(Math.abs(diff) / 60)}m ${String(Math.abs(diff) % 60).padStart(2, "0")}s vs yesterday`;
     // arc: x = fraction of day from sunrise to sunset
-    const W = innerWidth < 680 ? 340 : 600, Hs = 150, base = 118, peak = 22, L = 34, R = W - 34;
+    const W = innerWidth < 680 || state.trio ? 340 : 600, Hs = 150, base = 118, peak = 22, L = 34, R = W - 34;
     const frac = (now - t.sunrise) / len;
     const arcY = f => base - (base - peak) * Math.sin(Math.PI * f);
     let arcPath = ""; for (let i = 0; i <= 60; i++) { const f = i / 60; arcPath += (i ? " L" : "M") + (L + (R - L) * f).toFixed(1) + "," + arcY(f).toFixed(1); }
@@ -767,10 +817,8 @@
         <div class="stat"><div class="k">Sunset</div><div class="v">${esc(fmtTime(t.sunset))}</div></div>
         <div class="stat"><div class="k">Day length</div><div class="v">${fmtDuration(len)}</div></div>
       </div>
-      <div class="golden">
-        <span>☀︎ Golden hour ${esc(fmtTime(t.golden))} – ${esc(fmtTime(t.sunset))}</span>
-        <span class="muted">${esc(diffTxt)}</span>
-      </div>`;
+      <div class="golden"><span>☀︎ Golden hour ${esc(fmtTime(t.golden))} – ${esc(fmtTime(t.sunset))}</span></div>
+      ${seasonStrip()}`;
   }
 
   const PHASES = [[0.0333, "New moon"], [0.2167, "Waxing crescent"], [0.2833, "First quarter"], [0.4667, "Waxing gibbous"], [0.5333, "Full moon"], [0.7167, "Waning gibbous"], [0.7833, "Last quarter"], [0.9667, "Waning crescent"], [1.01, "New moon"]];
@@ -826,6 +874,79 @@
   }
 
 
+
+  /* ---------- tides (NOAA, US coasts) ---------- */
+  const TIDE_MAX_KM = 40;
+  const tidesReady = () => state.tide && state.tide._key === key(state.place) && state.tide.events && state.tide.events.length;
+  const kmBetween = (a, b, c, d) => { const r = Math.PI / 180, x = Math.sin((c - a) * r / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin((d - b) * r / 2) ** 2; return 12742 * Math.asin(Math.sqrt(x)); };
+  function parseZoneLocal(str, zone) {             // "2026-11-12 06:19" in the station's local time
+    const [d, t] = str.split(" "), [Y, M, D] = d.split("-").map(Number), [h, m] = t.split(":").map(Number);
+    const guess = Date.UTC(Y, M - 1, D, h, m);
+    return new Date(guess - zoneOffset(new Date(guess), zone));
+  }
+  async function tideStations() {
+    const cached = store.get("tideStations", null);
+    if (cached && Date.now() - cached.at < 30 * 864e5) return cached.list;
+    const j = await getJSON("https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions");
+    const list = j.stations.map(s => [s.id, s.name, s.state || "", +s.lat, +s.lng]);
+    store.set("tideStations", { at: Date.now(), list });
+    return list;
+  }
+  async function loadTides() {
+    const p = state.place, k = key(p);
+    // NOAA covers US coasts and territories; skip the big download for places obviously elsewhere
+    if (!(p.lon < -60 && p.lat > 10 && p.lat < 72) && !(p.lon > 140 && p.lat > 10 && p.lat < 22)) { state.tide = { _key: k, events: [] }; return; }
+    if (state.tide && state.tide._key === k && Date.now() - state.tide.at < 6 * 36e5) return;
+    try {
+      const list = await tideStations();
+      let best = null;
+      for (const s of list) { const d = kmBetween(p.lat, p.lon, s[3], s[4]); if (!best || d < best.d) best = { s, d }; }
+      if (!best || best.d > TIDE_MAX_KM) { state.tide = { _key: k, at: Date.now(), events: [] }; store.set("tide", state.tide); return; }
+      const z = zoneParts(new Date(Date.now() - 864e5), tz());
+      const begin = `${z.year}${String(z.month).padStart(2, "0")}${String(z.day).padStart(2, "0")}`;
+      const j = await getJSON(`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=daylight&begin_date=${begin}&range=96&datum=MLLW&station=${best.s[0]}&time_zone=lst_ldt&units=english&interval=hilo&format=json`);
+      const events = (j.predictions || []).map(e => ({ t: parseZoneLocal(e.t, tz()).valueOf(), ft: +e.v, type: e.type }));
+      state.tide = { _key: k, at: Date.now(), station: { id: best.s[0], name: best.s[1], state: best.s[2], km: best.d }, events };
+      store.set("tide", state.tide);
+    } catch (err) { console.warn("Tides unavailable", err); }
+  }
+  // water level between two predicted extremes, using a cosine curve (standard tide-table method)
+  function tideLevel(ev, t) {
+    for (let i = 0; i < ev.length - 1; i++) {
+      const a = ev[i], b = ev[i + 1];
+      if (t >= a.t && t <= b.t) { const f = (t - a.t) / (b.t - a.t); return a.ft + (b.ft - a.ft) * (1 - Math.cos(Math.PI * f)) / 2; }
+    }
+    return null;
+  }
+  const ftOrM = ft => state.units === "f" ? `${ft.toFixed(1)} ft` : `${(ft * 0.3048).toFixed(2)} m`;
+  function wTides() {
+    const td = state.tide, ev = td.events, now = Date.now();
+    const upcoming = ev.filter(e => e.t > now).slice(0, 4);
+    if (!upcoming.length) return `<div class="skeleton">No upcoming tide predictions.</div>`;
+    const next = upcoming[0], level = tideLevel(ev, now), rising = next.type === "H";
+    // chart: 6h back to 24h ahead
+    const W = 360, H = 96, t0 = now - 6 * 36e5, t1 = now + 24 * 36e5;
+    const win = ev.filter(e => e.t >= t0 - 8 * 36e5 && e.t <= t1 + 8 * 36e5);
+    const lo = Math.min(...win.map(e => e.ft)), hi = Math.max(...win.map(e => e.ft)), span = Math.max(hi - lo, 0.5);
+    const X = t => 6 + (W - 12) * (t - t0) / (t1 - t0), Yv = v => 14 + (H - 30) * (1 - (v - lo) / span);
+    let d = ""; for (let i = 0; i <= 120; i++) { const t = t0 + (t1 - t0) * i / 120, v = tideLevel(ev, t); if (v != null) d += (d ? " L" : "M") + X(t).toFixed(1) + "," + Yv(v).toFixed(1); }
+    const marks = ev.filter(e => e.t >= t0 && e.t <= t1).map(e => `<circle cx="${X(e.t)}" cy="${Yv(e.ft)}" r="3" fill="#0ea5e9"/><text x="${X(e.t)}" y="${e.type === "H" ? Yv(e.ft) - 6 : Yv(e.ft) + 13}" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" opacity=".6">${e.type}</text>`).join("");
+    const nowX = X(now), nowY = level != null ? Yv(level) : null;
+    const chart = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;color:var(--ink);margin:6px 0 4px">
+        <defs><linearGradient id="tdg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ea5e9" stop-opacity=".35"/><stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/></linearGradient></defs>
+        ${d ? `<path d="${d} L${X(t1)},${H} L${X(t0)},${H} Z" fill="url(#tdg)"/><path d="${d}" fill="none" stroke="#0ea5e9" stroke-width="2.5"/>` : ""}
+        <line x1="${nowX}" x2="${nowX}" y1="6" y2="${H - 4}" stroke="currentColor" stroke-opacity=".3" stroke-dasharray="3 3"/>
+        ${nowY != null ? `<circle cx="${nowX}" cy="${nowY}" r="4.5" fill="#fff" stroke="#0ea5e9" stroke-width="2.5"/>` : ""}${marks}
+      </svg>`;
+    const inTxt = ms => { const m = Math.round(ms / 60e3); return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`; };
+    const rows = upcoming.slice(1).map(e => `<div class="tide-row"><span>${e.type === "H" ? "High" : "Low"}</span><span>${esc(fmtTime(new Date(e.t)))}</span><span class="muted">${ftOrM(e.ft)}</span></div>`).join("");
+    const st = td.station;
+    return `<div class="tide-next"><span class="tide-arrow">${rising ? "↑" : "↓"}</span><div>
+        <div><b>${next.type === "H" ? "High" : "Low"} tide ${esc(fmtTime(new Date(next.t)))}</b> <span class="muted">in ${inTxt(next.t - now)}</span></div>
+        <div class="tiny muted">${rising ? "Rising" : "Falling"}${level != null ? ", now " + ftOrM(level) : ""} · ${ftOrM(next.ft)} at ${next.type === "H" ? "high" : "low"}</div></div></div>
+      ${chart}${rows}
+      <div class="tiny muted" style="margin-top:8px">${esc(st.name)}${st.state ? ", " + esc(st.state) : ""} · ${Math.round(st.km)} km away · NOAA</div>`;
+  }
   /* ---------- night sky ---------- */
   // Anchor = the constellation's easiest-to-find bright star or shape (RA hours, Dec degrees)
   const CONSTELLATIONS = [
@@ -928,17 +1049,22 @@
         <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div>${list}${moonNote}${risingHTML(rising)}</div>
       </div>`;
   }
-  const RENDER = { now: wNow, hourly: wHourly, daily: wDaily, air: wAir, sun: wSun, moon: wMoon, sky: wSky };
+  const RENDER = { now: wNow, hourly: wHourly, daily: wDaily, air: wAir, sun: wSun, moon: wMoon, tides: wTides, sky: wSky };
 
   /* =========================================================
      Layout rendering + arranging
      ========================================================= */
+  // widgets that actually appear: not hidden by the user, and tides only near a tide station
+  const shownIds = () => state.order.filter(id => !state.hidden.includes(id) && (id !== "tides" || tidesReady()));
   function renderAll() {
     applyTheme();
     const grid = $("#grid"); grid.innerHTML = "";
-    state.order.filter(id => !state.hidden.includes(id)).forEach((id, n) => {
+    const shown = shownIds(), trio = innerWidth > 980 && ["sun", "moon", "tides"].every(id => shown.includes(id));
+    state.trio = trio;
+    shown.forEach((id, n) => {
       const w = WIDGETS.find(x => x.id === id);
-      const card = el("section", { class: `card ${w.span}`, "data-id": id, style: `animation-delay:${n * 50}ms` });
+      const span = trio && (id === "sun" || id === "moon" || id === "tides") ? "span-4" : w.span;
+      const card = el("section", { class: `card ${span}`, "data-id": id, style: `animation-delay:${n * 50}ms` });
       let inner;
       try { inner = RENDER[id](); } catch (err) { console.error(err); inner = `<div class="skeleton error">Something went wrong drawing this widget.</div>`; }
       card.innerHTML = `<div class="card-tools">
@@ -960,7 +1086,7 @@
 
   $("#grid").addEventListener("click", e => {
     const b = e.target.closest("button[data-act]"); if (!b) return;
-    const id = b.closest(".card").dataset.id, visible = state.order.filter(x => !state.hidden.includes(x));
+    const id = b.closest(".card").dataset.id, visible = shownIds();
     if (b.dataset.act === "hide") state.hidden.push(id);
     else {
       const vi = visible.indexOf(id), swapWith = visible[vi + (b.dataset.act === "left" ? -1 : 1)];
@@ -1148,6 +1274,17 @@
       `Next full moon: ${dd(full)}`,
       `Next new moon:  ${dd(nw)}`, "");
 
+    if (tidesReady()) {
+      const td = state.tide, up = td.events.filter(e => e.t > Date.now()).slice(0, 6);
+      out.push("TIDES", sub, `Station: ${td.station.name}${td.station.state ? ", " + td.station.state : ""} (NOAA ${td.station.id}, ${Math.round(td.station.km)} km away)`);
+      const lv = tideLevel(td.events, Date.now()); if (lv != null) out.push(`Now:     ${ftOrM(lv)}, ${up[0] && up[0].type === "H" ? "rising" : "falling"}`);
+      up.forEach(e => out.push(`  ${e.type === "H" ? "High" : "Low "}  ${fmtTime(new Date(e.t)).padEnd(9)} ${ftOrM(e.ft)}`));
+      out.push("Heights are above mean lower low water (MLLW).", "");
+    }
+    { const si = seasonInfo(new Date(), p.lat), mk = si.marks;
+      const df = d => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: hour12(), timeZone: zone }).format(d);
+      out.push("SEASON", sub, `${si.season}, ${Math.round(si.frac * 100)}% through. ${si.eventLabel} in ${si.days} days.`,
+        `This year: March equinox ${df(mk[0])} · June solstice ${df(mk[1])} · September equinox ${df(mk[2])} · December solstice ${df(mk[3])}`, ""); }
     out.push("NIGHT SKY", sub);
     const sk = skyData();
     if (!sk.dark) out.push("The sky doesn't get properly dark here tonight, so no star chart.", "");
