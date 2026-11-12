@@ -199,6 +199,8 @@
   .chip { padding: 6px 12px; border-radius: 999px; border: 1px dashed #9ca3af; background: transparent; cursor: pointer; font-size: .86rem; }
 
   @media (max-width: 480px) { .pollutants { grid-template-columns: repeat(2, 1fr); } }
+  .report-pre { width: 100%; height: 46vh; overflow: auto; margin: 0; padding: 12px; border-radius: 12px; background: rgba(0,0,0,.05); font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
+  body.dark .report-pre { background: rgba(255,255,255,.06); }
   footer { margin-top: 28px; text-align: center; font-size: .78rem; color: var(--ink-faint); }
   footer a { color: inherit; }
   .error { color: #b91c1c; font-size: .9rem; }
@@ -271,6 +273,20 @@
       <div class="hidden-list" id="hiddenList"></div>
     </div>
     <div class="row-btns"><button class="btn primary" id="setDone">Done</button></div>
+  </div>
+</div>
+
+<!-- hidden summary dialog (opened by the arrow-key sequence) -->
+<div class="scrim" id="dlScrim">
+  <div class="panel" role="dialog" aria-label="Download summary" style="width:min(720px,100%)">
+    <h3>Download today's summary?</h3>
+    <p class="tiny" style="margin:-6px 0 12px;opacity:.7" id="dlName"></p>
+    <pre class="report-pre" id="dlPreview"></pre>
+    <div class="row-btns">
+      <button class="btn primary" id="dlGo">Download .txt</button>
+      <button class="btn" id="dlCopy">Copy text</button>
+      <button class="btn" id="dlCancel">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -902,6 +918,143 @@
     state.place = p; state.firstRun = false; store.set("place", p);
     close("#locScrim"); renderAll(); refresh(true);
   }
+
+  /* =========================================================
+     Hidden summary download: ← ← → → ↑ ↓ ↑ ↓ (or the same swipes)
+     ========================================================= */
+  const SEQ = ["left", "left", "right", "right", "up", "down", "up", "down"];
+  let seqPos = 0;
+  function pushDir(dir) {
+    seqPos = dir === SEQ[seqPos] ? seqPos + 1 : (dir === SEQ[0] ? 1 : 0);
+    if (seqPos === SEQ.length) { seqPos = 0; openReport(); }
+  }
+  document.addEventListener("keydown", e => {
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    const dir = { ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down" }[e.key];
+    if (dir) pushDir(dir); else seqPos = 0;
+  });
+  let touch0 = null;
+  document.addEventListener("touchstart", e => { if (e.touches.length === 1) touch0 = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
+  document.addEventListener("touchend", e => {
+    if (!touch0) return;
+    const t = e.changedTouches[0], dx = t.clientX - touch0.x, dy = t.clientY - touch0.y; touch0 = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 40) return;
+    pushDir(Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : (dy < 0 ? "up" : "down"));
+  }, { passive: true });
+
+  function buildReport() {
+    const p = state.place, zone = tz(), now = new Date(), u = tempU();
+    const pad = (s, n) => String(s).padEnd(n);
+    const line = "=".repeat(64), sub = "-".repeat(64);
+    const longDate = new Intl.DateTimeFormat("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric", timeZone: zone }).format(now);
+    const stamp = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit", hour12: hour12(), timeZone: zone, timeZoneName: "short" }).format(now);
+    const out = [];
+    out.push(line, "DAYLIGHT DAILY SUMMARY", line,
+      `Date:        ${longDate}`,
+      `Generated:   ${stamp}`,
+      `Location:    ${p.name}${p.region ? ", " + p.region : ""}`,
+      `Coordinates: ${(+p.lat).toFixed(4)}, ${(+p.lon).toFixed(4)}`,
+      `Time zone:   ${zone}`,
+      `Units:       ${state.units === "f" ? "Fahrenheit, mph, inches" : "Celsius, km/h, millimeters"}`, "");
+
+    out.push("CURRENT CONDITIONS", sub);
+    if (wxReady()) {
+      const c = state.wx.current, d = state.wx.daily;
+      const fetched = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", hour12: hour12(), timeZone: zone }).format(new Date(state.fetchedAt));
+      out.push(`Observed at:      ${c.time.replace("T", " ")} local (data fetched ${fetched})`,
+        `Conditions:       ${wmo(c.weather_code)[0]} (${c.is_day ? "day" : "night"})`,
+        `Temperature:      ${T(c.temperature_2m)}${u}`,
+        `Feels like:       ${T(c.apparent_temperature)}${u}`,
+        `Today high / low: ${T(d.temperature_2m_max[0])}${u} / ${T(d.temperature_2m_min[0])}${u}`,
+        `Humidity:         ${Math.round(c.relative_humidity_2m)}%`,
+        `Wind:             ${wind(c.wind_speed_10m)} from the ${compass(c.wind_direction_10m)} (${Math.round(c.wind_direction_10m)}°), gusts ${wind(c.wind_gusts_10m)}`,
+        `Precipitation:    ${rainAmt(c.precipitation)} in the last hour`,
+        `Chance of rain:   ${Math.round(d.precipitation_probability_max[0] ?? 0)}% today, ${rainAmt(d.precipitation_sum[0] ?? 0)} expected`,
+        `UV index max:     ${d.uv_index_max[0] == null ? "n/a" : d.uv_index_max[0].toFixed(1) + " (" + uvWord(d.uv_index_max[0]) + ")"}`, "");
+
+      out.push("NEXT 24 HOURS", sub, `${pad("Time", 10)}${pad("Temp", 8)}${pad("Rain", 7)}${pad("UV", 6)}Conditions`);
+      const h = state.wx.hourly; let start = h.time.indexOf(c.time.slice(0, 13) + ":00"); if (start < 0) start = 0;
+      const offs = state.wx.utc_offset_seconds * 1000;
+      for (let i = start; i < Math.min(start + 24, h.time.length); i++) {
+        const t = new Date(Date.parse(h.time[i] + ":00Z") - offs);
+        out.push(`${pad(fmtTime(t), 10)}${pad(T(h.temperature_2m[i]) + u, 8)}${pad((h.precipitation_probability[i] ?? 0) + "%", 7)}${pad(h.uv_index[i] == null ? "-" : h.uv_index[i].toFixed(1), 6)}${wmo(h.weather_code[i])[0]}`);
+      }
+      out.push("");
+
+      out.push("7-DAY FORECAST", sub, `${pad("Day", 16)}${pad("High", 8)}${pad("Low", 8)}${pad("Rain", 7)}${pad("Amount", 10)}${pad("UV", 6)}Conditions`);
+      d.time.forEach((day, i) => {
+        const name = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(day + "T12:00:00Z"));
+        out.push(`${pad(name, 16)}${pad(T(d.temperature_2m_max[i]) + u, 8)}${pad(T(d.temperature_2m_min[i]) + u, 8)}${pad((d.precipitation_probability_max[i] ?? 0) + "%", 7)}${pad(rainAmt(d.precipitation_sum[i] ?? 0), 10)}${pad(d.uv_index_max[i] == null ? "-" : d.uv_index_max[i].toFixed(1), 6)}${wmo(d.weather_code[i])[0]}`);
+      });
+      out.push("");
+    } else out.push("Weather data was not available when this summary was made.", "");
+
+    out.push("AIR QUALITY", sub);
+    if (aqReady() && state.aq.current.us_aqi != null) {
+      const c = state.aq.current, band = AQI_BANDS.find(b => c.us_aqi <= b[0]);
+      const f = v => v == null ? "n/a" : (+v).toFixed(1) + " µg/m³";
+      out.push(`US AQI:   ${Math.round(c.us_aqi)} (${band[1]})`, `Advice:   ${band[3]}`,
+        `PM2.5:    ${f(c.pm2_5)}`, `PM10:     ${f(c.pm10)}`, `Ozone:    ${f(c.ozone)}`, `NO2:      ${f(c.nitrogen_dioxide)}`, "");
+      out.push("POLLEN", sub);
+      const pk = [["Grass", "grass_pollen"], ["Birch", "birch_pollen"], ["Alder", "alder_pollen"], ["Ragweed", "ragweed_pollen"], ["Mugwort", "mugwort_pollen"], ["Olive", "olive_pollen"]];
+      const have = pk.filter(([, k]) => c[k] != null);
+      if (have.length) have.forEach(([n, k]) => out.push(`${pad(n + ":", 10)}${(+c[k]).toFixed(1)} grains/m³`));
+      else out.push("No pollen reading for this location (source covers Europe only).");
+      out.push("");
+    } else out.push("Air quality data was not available when this summary was made.", "");
+
+    const noon = zoneDayInstant(now, zone, 12), st = astro.sunTimes(noon, p.lat, p.lon), sy = astro.sunTimes(zoneDayInstant(now, zone, 12, -1), p.lat, p.lon);
+    const pos = astro.sunPosition(now, p.lat, p.lon);
+    out.push("SUN", sub);
+    if (st.polar) out.push(st.polar === "day" ? "Midnight sun: the sun does not set today." : "Polar night: the sun does not rise today.");
+    else {
+      const len = st.sunset - st.sunrise, lenY = sy.sunset - sy.sunrise, diff = Math.round((len - lenY) / 1000);
+      out.push(`Dawn (civil):        ${fmtTime(st.dawn)}`, `Sunrise:             ${fmtTime(st.sunrise)}`,
+        `Morning golden hour: ${fmtTime(st.sunrise)} - ${fmtTime(st.goldenEnd)}`, `Solar noon:          ${fmtTime(st.noon)}`,
+        `Evening golden hour: ${fmtTime(st.golden)} - ${fmtTime(st.sunset)}`, `Sunset:              ${fmtTime(st.sunset)}`,
+        `Dusk (civil):        ${fmtTime(st.dusk)}`, `Day length:          ${fmtDuration(len)} (${diff >= 0 ? "+" : "-"}${Math.floor(Math.abs(diff) / 60)}m ${Math.abs(diff) % 60}s vs yesterday)`);
+    }
+    out.push(`Sun right now:       ${pos.altitude.toFixed(1)}° altitude, ${pos.azimuth.toFixed(0)}° azimuth (${compass(pos.azimuth)})`, "");
+
+    const m = astro.moonIllumination(now), mt = astro.moonTimes(zoneDayInstant(now, zone, 0), p.lat, p.lon);
+    const full = astro.nextPhase(now, 0.5), nw = astro.nextPhase(now, 0);
+    const dd = x => x ? new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric", timeZone: zone }).format(x) : "n/a";
+    out.push("MOON", sub,
+      `Phase:          ${PHASES.find(x => m.phase < x[0])[1]} (cycle position ${(m.phase * 100).toFixed(1)}%)`,
+      `Illuminated:    ${(m.fraction * 100).toFixed(1)}%`,
+      `Distance:       ${Math.round(m.dist).toLocaleString("en-US")} km`,
+      `Moonrise:       ${mt.rise ? fmtTime(mt.rise) : "none today"}`,
+      `Moonset:        ${mt.set ? fmtTime(mt.set) : "none today"}`,
+      `Next full moon: ${dd(full)}`,
+      `Next new moon:  ${dd(nw)}`, "");
+
+    out.push(line, "Weather and air quality: Open-Meteo.com (CC BY 4.0).", "Sun and moon: calculated in the browser; times are approximate to about a minute.", line, "");
+    return out.join("\n");
+  }
+  function reportFileName() {
+    const p = zoneParts(new Date(), tz());
+    const slug = state.place.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "location";
+    return `daylight-${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}-${slug}.txt`;
+  }
+  let reportText = "";
+  function openReport() {
+    reportText = buildReport();
+    $("#dlPreview").textContent = reportText;
+    $("#dlName").textContent = reportFileName();
+    $("#dlCopy").textContent = "Copy text";
+    open("#dlScrim");
+  }
+  $("#dlGo").addEventListener("click", () => {
+    const url = URL.createObjectURL(new Blob([reportText], { type: "text/plain;charset=utf-8" }));
+    const a = el("a", { href: url, download: reportFileName() });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    close("#dlScrim");
+  });
+  $("#dlCopy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(reportText); $("#dlCopy").textContent = "Copied"; } catch (e) { $("#dlCopy").textContent = "Copy failed"; }
+  });
+  $("#dlCancel").addEventListener("click", () => close("#dlScrim"));
 
   /* =========================================================
      Web search box
