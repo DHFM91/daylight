@@ -863,15 +863,18 @@
     if (when < now) when = new Date(now.valueOf() + 30 * 60e3);
     return { when, isNow: false };
   }
-  function wSky() {
+  function skyData() {
     const p = state.place, { when, isNow } = skyViewTime();
-    const sunAlt = astro.sunPosition(when, p.lat, p.lon).altitude;
-    if (sunAlt > -6) {
-      return `<div class="skeleton" style="color:var(--ink)"><b>No proper darkness tonight</b><br><span class="muted">At this time of year the sky here doesn't get dark enough to see the constellations well.</span></div>`;
-    }
+    const dark = astro.sunPosition(when, p.lat, p.lon).altitude <= -6;
     const vis = CONSTELLATIONS.map(c => ({ ...c, ...astro.starPosition(c.ra, c.dec, when, p.lat, p.lon) }))
       .filter(c => c.altitude > 12).sort((a, b) => b.altitude - a.altitude).slice(0, 8);
-    const moon = astro.moonPosition(when, p.lat, p.lon), mIll = astro.moonIllumination(when);
+    return { when, isNow, dark, vis, moon: astro.moonPosition(when, p.lat, p.lon), mIll: astro.moonIllumination(when) };
+  }
+  function wSky() {
+    const { when, isNow, dark, vis, moon, mIll } = skyData();
+    if (!dark) {
+      return `<div class="skeleton" style="color:var(--ink)"><b>No proper darkness tonight</b><br><span class="muted">At this time of year the sky here doesn't get dark enough to see the constellations well.</span></div>`;
+    }
     // sky map: horizon circle, zenith in centre. Held overhead, so north is up and east is LEFT.
     const S = 360, C = S / 2, R = 150;
     const xy = (alt, az) => { const r = R * (90 - alt) / 90, a = az * Math.PI / 180; return [C - r * Math.sin(a), C - r * Math.cos(a)]; };
@@ -1122,26 +1125,64 @@
       `Next full moon: ${dd(full)}`,
       `Next new moon:  ${dd(nw)}`, "");
 
+    out.push("NIGHT SKY", sub);
+    const sk = skyData();
+    if (!sk.dark) out.push("The sky doesn't get properly dark here tonight, so no star chart.", "");
+    else {
+      out.push(`${sk.isNow ? "Right now" : "Tonight around " + fmtTime(sk.when)}, the best placed constellations:`, "");
+      out.push(...asciiSky(sk), "");
+      sk.vis.forEach((c, i) => out.push(`${String(i + 1).padStart(2)}. ${c.name}`, `    Look ${dir16(c.azimuth)}, ${heightWord(c.altitude)} (altitude ${Math.round(c.altitude)}°, azimuth ${Math.round(c.azimuth)}°)`, `    ${c.tip}`));
+      if (sk.moon.altitude > 0) out.push(` M. Moon: ${dir16(sk.moon.azimuth)}, ${heightWord(sk.moon.altitude)} (${Math.round(sk.mIll.fraction * 100)}% lit)`);
+      out.push("");
+    }
+
     out.push(line, "Weather and air quality: Open-Meteo.com (CC BY 4.0).", "Sun and moon: calculated in the browser; times are approximate to about a minute.", line, "");
     return out.join("\n");
+  }
+  // Text sky map: zenith in the centre, horizon as the ring, north up, east left (held overhead)
+  function asciiSky(sk) {
+    const W = 49, H = 25, cx = 24, cy = 12, rx = 22, ry = 11;   // characters are ~2x taller than wide
+    const g = Array.from({ length: H }, () => Array(W).fill(" "));
+    const put = (x, y, ch) => { x = Math.round(x); y = Math.round(y); if (y >= 0 && y < H && x >= 0 && x < W) g[y][x] = ch; };
+    for (let a = 0; a < 360; a += 0.5) { const t = a * Math.PI / 180; put(cx + rx * Math.cos(t), cy + ry * Math.sin(t), "·"); }
+    put(cx, cy, "+");
+    const plot = (alt, az, ch) => { const r = (90 - alt) / 90, t = az * Math.PI / 180; put(cx - rx * r * Math.sin(t), cy - ry * r * Math.cos(t), ch); };
+    if (sk.moon.altitude > 0) plot(sk.moon.altitude, sk.moon.azimuth, "M");
+    sk.vis.forEach((c, i) => plot(c.altitude, c.azimuth, String(i + 1)));
+    const rows = g.map(r => "      " + r.join(""));
+    rows.unshift(" ".repeat(6 + cx) + "N"); rows.push(" ".repeat(6 + cx) + "S");
+    const mid = cy + 1; rows[mid] = "   E  " + rows[mid].slice(6) + "  W";
+    rows.push("", "      Hold overhead: N at top, E on the left. + is straight up,", "      the dotted ring is the horizon. M = Moon.");
+    return rows;
   }
   function reportFileName() {
     const p = zoneParts(new Date(), tz());
     const slug = state.place.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "location";
-    return `daylight-${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}-${slug}.txt`;
+    const base = `daylight-${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}-${slug}`;
+    const n = (store.get("saves", {})[base] || 0) + 1;
+    return { base, name: `${base}-${String(n).padStart(2, "0")}.txt` };
+  }
+  function countSave(base) {
+    const saves = store.get("saves", {});
+    saves[base] = (saves[base] || 0) + 1;
+    // keep only the 60 most recent day/place counters so storage doesn't grow forever
+    const keys = Object.keys(saves).sort(); while (keys.length > 60) delete saves[keys.shift()];
+    store.set("saves", saves);
   }
   let reportText = "";
   function openReport() {
     reportText = buildReport();
     $("#dlPreview").textContent = reportText;
-    $("#dlName").textContent = reportFileName();
+    $("#dlName").textContent = "Saves as " + reportFileName().name;
     $("#dlCopy").textContent = "Copy text";
     open("#dlScrim");
   }
   $("#dlGo").addEventListener("click", () => {
     const url = URL.createObjectURL(new Blob([reportText], { type: "text/plain;charset=utf-8" }));
-    const a = el("a", { href: url, download: reportFileName() });
+    const fn = reportFileName();
+    const a = el("a", { href: url, download: fn.name });
     document.body.appendChild(a); a.click(); a.remove();
+    countSave(fn.base);
     setTimeout(() => URL.revokeObjectURL(url), 2000);
     close("#dlScrim");
   });
