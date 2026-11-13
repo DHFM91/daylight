@@ -94,6 +94,9 @@
     display: flex; align-items: center; gap: 8px;
   }
   .card h2 svg { width: 15px; height: 15px; }
+  .card h2 { flex-wrap: wrap; }
+  .card h2 .h2link { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+  .card h2 .h2link:hover { text-decoration-thickness: 2px; }
   .muted { color: var(--ink-faint); }
   .soft { color: var(--ink-soft); }
   .tiny { font-size: .78rem; }
@@ -367,7 +370,8 @@
     { id: "sky",    title: "Night sky",       span: "span-12" },
     { id: "almanac", title: "Almanac",        span: "span-4" },
     { id: "horoscope", title: "Sky horoscope", span: "span-8" },
-    { id: "tarot",  title: "Daily tarot",     span: "span-12" }
+    { id: "tarot",  title: "Today's Global Tarot Draw", span: "span-12",
+      link: { text: "(Click Here for Personalized Reading)", href: "/tarot-table/" } }
   ];
 
   const state = {
@@ -649,7 +653,7 @@
   /* =========================================================
      Widgets
      ========================================================= */
-  const H2 = (svg, text) => `<h2>${svg}${esc(text)}</h2>`;
+  const H2 = (svg, text, link) => `<h2>${svg}${esc(text)}${link ? ` <a class="h2link" href="${esc(link.href)}" target="_blank" rel="noopener">${esc(link.text)}</a>` : ""}</h2>`;
   const ICONS = {
     now: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z"/></svg>`,
     hourly: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
@@ -1466,7 +1470,7 @@
       try { inner = RENDER[id](); } catch (err) { console.error(err); inner = `<div class="skeleton error">Something went wrong drawing this widget.</div>`; }
       card.innerHTML = `<div class="card-tools">
           <button data-act="left" title="Move earlier">◀</button><button data-act="right" title="Move later">▶</button><button data-act="hide" title="Hide">✕</button>
-        </div>${H2(ICONS[id], w.title)}${inner}`;
+        </div>${H2(ICONS[id], w.title, w.link)}${inner}`;
       grid.appendChild(card);
     });
     if (!renderAll.done) { grid.classList.add("first"); setTimeout(() => grid.classList.remove("first"), 1200); renderAll.done = true; }
