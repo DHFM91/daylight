@@ -1,4 +1,6 @@
-# Daylight
+# Dave's Daily Dashboard
+
+(Formerly "Daylight"; the web address and saved files keep that name.)
 
 A calm, widget-style start page for your browser: clock, current weather, a 24-hour chart, 7-day forecast, air quality, and sun and moon times for any city.
 
