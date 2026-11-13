@@ -216,6 +216,25 @@
   .tide-arrow { width: 38px; height: 38px; border-radius: 50%; background: rgba(14,165,233,.14); color: #0284c7; display: grid; place-items: center; font-size: 1.2rem; font-weight: 700; flex: none; }
   body.dark .tide-arrow { color: #7dd3fc; }
   .tide-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; font-size: .88rem; padding: 5px 0; border-top: 1px solid var(--line); }
+  .alm-quote { font-style: italic; font-size: .95rem; line-height: 1.45; padding: 4px 0 12px; }
+  .alm-row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .9rem; }
+  .alm-row .k { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); padding-top: 3px; }
+  .horo-wrap { display: grid; grid-template-columns: minmax(190px, 270px) 1fr; gap: 18px; align-items: center; }
+  @media (max-width: 520px) { .horo-wrap { grid-template-columns: 1fr; } .horo-wheel { max-width: 260px; margin: 0 auto; } }
+  .horo-wheel { width: 100%; height: auto; display: block; }
+  .pl-row { display: grid; grid-template-columns: 22px 70px 1fr; font-size: .86rem; padding: 2px 0; }
+  .pl-row .g { font-weight: 700; } .rx { color: #dc2626; font-weight: 700; font-size: .75rem; }
+  body.dark .rx { color: #fca5a5; }
+  .horo-text { margin-top: 12px; font-size: .9rem; line-height: 1.5; color: var(--ink-soft); }
+  .horo-text p { margin: 0 0 6px; }
+  .mystic-note { margin-top: 10px; font-size: .74rem; color: var(--ink-faint); font-style: italic; }
+  .trow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  @media (max-width: 680px) { .trow { grid-template-columns: repeat(3, 1fr); } }
+  .tslot { margin: 0; text-align: center; }
+  .tcard { width: 100%; max-width: 130px; height: auto; display: block; margin: 0 auto 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.12)); }
+  .tcard.rev { transform: rotate(180deg); }
+  .tslot figcaption { display: flex; flex-direction: column; gap: 2px; font-size: .84rem; line-height: 1.3; }
+  .tpos { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
   footer { margin-top: 28px; text-align: center; font-size: .78rem; color: var(--ink-faint); }
   footer a { color: inherit; }
   .error { color: #b91c1c; font-size: .9rem; }
@@ -327,7 +346,10 @@
     { id: "sun",    title: "Sun",             span: "span-6" },
     { id: "moon",   title: "Moon",            span: "span-6" },
     { id: "tides",  title: "Tides",           span: "span-6" },
-    { id: "sky",    title: "Night sky",       span: "span-12" }
+    { id: "sky",    title: "Night sky",       span: "span-12" },
+    { id: "almanac", title: "Almanac",        span: "span-5" },
+    { id: "horoscope", title: "Sky horoscope", span: "span-7" },
+    { id: "tarot",  title: "Daily tarot",     span: "span-12" }
   ];
 
   const state = {
@@ -616,6 +638,9 @@
     sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 18a5 5 0 0 0-10 0M12 3v6M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4M23 22H1M8 6l4-4 4 4"/></svg>`,
     sky: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>`,
     tides: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0M12 3v5M9.5 5.5L12 8l2.5-2.5"/></svg>`,
+    almanac: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>`,
+    horoscope: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg>`,
+    tarot: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="10" height="15" rx="2" transform="rotate(-8 8 12.5)"/><rect x="10" y="4" width="10" height="15" rx="2" transform="rotate(8 15 11.5)"/></svg>`,
     moon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`
   };
   const waiting = () => `<div class="skeleton">${state.error ? `<span class="error">${esc(state.error)}</span>` : "Loading…"}</div>`;
@@ -1051,7 +1076,352 @@
         <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div>${list}${moonNote}${risingHTML(rising)}</div>
       </div>`;
   }
-  const RENDER = { now: wNow, hourly: wHourly, daily: wDaily, air: wAir, sun: wSun, moon: wMoon, tides: wTides, sky: wSky };
+  /* =========================================================
+     Planets: JPL "approximate positions of the major planets" (Keplerian
+     elements valid 1800–2050), giving geocentric ecliptic longitudes
+     good to well under a degree — plenty for zodiac signs.
+     ========================================================= */
+  const planets = (() => {
+    const D = Math.PI / 180;
+    // a, e, I, L, long. perihelion, long. node  (+ rates per Julian century)
+    const EL = {
+      mercury: [0.38709927, 0.20563593, 7.00497902, 252.25032350, 77.45779628, 48.33076593, 0.00000037, 0.00001906, -0.00594749, 149472.67411175, 0.16047689, -0.12534081],
+      venus:   [0.72333566, 0.00677672, 3.39467605, 181.97909950, 131.60246718, 76.67984255, 0.00000390, -0.00004107, -0.00078890, 58517.81538729, 0.00268329, -0.27769418],
+      earth:   [1.00000261, 0.01671123, -0.00001531, 100.46457166, 102.93768193, 0, 0.00000562, -0.00004392, -0.01294668, 35999.37244981, 0.32327364, 0],
+      mars:    [1.52371034, 0.09339410, 1.84969142, -4.55343205, -23.94362959, 49.55953891, 0.00001847, 0.00007882, -0.00813131, 19140.30268499, 0.44441088, -0.29257343],
+      jupiter: [5.20288700, 0.04838624, 1.30439695, 34.39644051, 14.72847983, 100.47390909, -0.00011607, -0.00013253, -0.00183714, 3034.74612775, 0.21252668, 0.20469106],
+      saturn:  [9.53667594, 0.05386179, 2.48599187, 49.95424423, 92.59887831, 113.66242448, -0.00125060, -0.00050991, 0.00193609, 1222.49362201, -0.41897216, -0.28867794],
+      uranus:  [19.18916464, 0.04725744, 0.77263783, 313.23810451, 170.95427630, 74.01692503, -0.00196176, -0.00004397, -0.00242939, 428.48202785, 0.40805281, 0.04240589],
+      neptune: [30.06992276, 0.00859048, 1.77004347, -55.12002969, 44.96476227, 131.78422574, 0.00026291, 0.00005105, 0.00035372, 218.45945325, -0.32241464, -0.00508664],
+      pluto:   [39.48211675, 0.24882730, 17.14001206, 238.92903833, 224.06891629, 110.30393684, -0.00031596, 0.00005170, 0.00004818, 145.20780515, -0.04062942, -0.01183482]
+    };
+    const T = date => (date.valueOf() / 864e5 + 2440587.5 - 2451545.0) / 36525;
+    function helio(name, t) {
+      const e0 = EL[name], v = i => e0[i] + e0[i + 6] * t;
+      const a = v(0), e = v(1), I = v(2) * D, L = v(3), w = v(4), O = v(5);
+      const om = (w - O) * D, Om = O * D;
+      let M = ((L - w) % 360 + 540) % 360 - 180; M *= D;
+      let E = M + e * Math.sin(M);
+      for (let k = 0; k < 8; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+      const x1 = a * (Math.cos(E) - e), y1 = a * Math.sqrt(1 - e * e) * Math.sin(E);
+      const co = Math.cos(om), so = Math.sin(om), cO = Math.cos(Om), sO = Math.sin(Om), cI = Math.cos(I), sI = Math.sin(I);
+      return [(co * cO - so * sO * cI) * x1 + (-so * cO - co * sO * cI) * y1,
+              (co * sO + so * cO * cI) * x1 + (-so * sO + co * cO * cI) * y1,
+              (so * sI) * x1 + (co * sI) * y1];
+    }
+    // geocentric ecliptic longitude, of date (precession added), degrees 0–360
+    function longitude(name, date) {
+      const t = T(date), p = helio(name, t), ea = helio("earth", t);
+      const lon = Math.atan2(p[1] - ea[1], p[0] - ea[0]) / D + 1.396971 * t;
+      return ((lon % 360) + 360) % 360;
+    }
+    function sunLongitude(date) {
+      const t = T(date), ea = helio("earth", t);
+      return (((Math.atan2(-ea[1], -ea[0]) / D + 1.396971 * t) % 360) + 360) % 360;
+    }
+    // Moon: main terms of the lunar theory (accurate to ~0.3°)
+    function moonLongitude(date) {
+      const d = date.valueOf() / 864e5 + 2440587.5 - 2451545.0;
+      const L = 218.316 + 13.176396 * d, M = (134.963 + 13.064993 * d) * D, Ms = (357.529 + 0.98560028 * d) * D;
+      const Dm = (297.850 + 12.190749 * d) * D, F = (93.272 + 13.229350 * d) * D;
+      const lon = L + 6.289 * Math.sin(M) + 1.274 * Math.sin(2 * Dm - M) + 0.658 * Math.sin(2 * Dm) + 0.214 * Math.sin(2 * M) - 0.186 * Math.sin(Ms) - 0.114 * Math.sin(2 * F);
+      return ((lon % 360) + 360) % 360;
+    }
+    return { longitude, sunLongitude, moonLongitude };
+  })();
+
+  const TAROT = [
+  { name: "The Fool", arcana: "major", num: "0", suit: null, up: "new beginnings, spontaneity, a leap of faith", rev: "recklessness, hesitation, a false start", phrase: "a fresh start that asks you to trust the leap" },
+  { name: "The Magician", arcana: "major", num: "I", suit: null, up: "willpower, skill, resourcefulness", rev: "scattered focus, untapped potential, poor planning", phrase: "the power to turn your ideas into something real" },
+  { name: "The High Priestess", arcana: "major", num: "II", suit: null, up: "intuition, inner knowing, quiet mystery", rev: "ignored instincts, secrets, disconnection from yourself", phrase: "a quiet invitation to listen to your inner voice" },
+  { name: "The Empress", arcana: "major", num: "III", suit: null, up: "nurturing, abundance, creativity", rev: "overgiving, creative block, neglecting yourself", phrase: "the abundance that grows when you nurture what you love" },
+  { name: "The Emperor", arcana: "major", num: "IV", suit: null, up: "structure, authority, stability", rev: "rigidity, control issues, a lack of discipline", phrase: "the steady structure that gives your goals a firm foundation" },
+  { name: "The Hierophant", arcana: "major", num: "V", suit: null, up: "tradition, guidance, shared values", rev: "nonconformity, questioning rules, personal beliefs", phrase: "the wisdom found in tradition and trusted teachers" },
+  { name: "The Lovers", arcana: "major", num: "VI", suit: null, up: "love, harmony, aligned choices", rev: "disharmony, misalignment, a difficult decision", phrase: "a heartfelt choice that reflects what you truly value" },
+  { name: "The Chariot", arcana: "major", num: "VII", suit: null, up: "determination, momentum, victory", rev: "lack of direction, scattered energy, loss of control", phrase: "focused determination that carries you steadily toward your goal" },
+  { name: "Strength", arcana: "major", num: "VIII", suit: null, up: "courage, patience, gentle resilience", rev: "self-doubt, low confidence, raw emotion", phrase: "the quiet courage of meeting challenges with patience and compassion" },
+  { name: "The Hermit", arcana: "major", num: "IX", suit: null, up: "solitude, reflection, inner guidance", rev: "isolation, withdrawal, resisting reflection", phrase: "a pause for solitude and looking inward for answers" },
+  { name: "Wheel of Fortune", arcana: "major", num: "X", suit: null, up: "cycles, change, good timing", rev: "resistance to change, setbacks, bad timing", phrase: "the turning of cycles and the change that comes with them" },
+  { name: "Justice", arcana: "major", num: "XI", suit: null, up: "fairness, truth, accountability", rev: "bias, dishonesty, avoiding responsibility", phrase: "fairness and honesty guiding the choices you make now" },
+  { name: "The Hanged Man", arcana: "major", num: "XII", suit: null, up: "surrender, new perspective, pause", rev: "stalling, resistance, needless sacrifice", phrase: "a pause that lets you see things from a new angle" },
+  { name: "Death", arcana: "major", num: "XIII", suit: null, up: "endings, transformation, release", rev: "resisting change, clinging to the past, slow transition", phrase: "a meaningful ending that makes room for transformation and renewal" },
+  { name: "Temperance", arcana: "major", num: "XIV", suit: null, up: "balance, moderation, patience", rev: "imbalance, excess, impatience", phrase: "a gentle balance found through patience and moderation" },
+  { name: "The Devil", arcana: "major", num: "XV", suit: null, up: "attachment, temptation, shadow side", rev: "release, breaking free, reclaiming your power", phrase: "noticing the habits that bind you and choosing freedom" },
+  { name: "The Tower", arcana: "major", num: "XVI", suit: null, up: "sudden change, upheaval, revelation", rev: "avoiding change, fear of disruption, slow rebuilding", phrase: "an unexpected shake-up that clears away what was unstable" },
+  { name: "The Star", arcana: "major", num: "XVII", suit: null, up: "hope, healing, inspiration", rev: "discouragement, lost faith, disconnection", phrase: "renewed hope and a calm sense of healing" },
+  { name: "The Moon", arcana: "major", num: "XVIII", suit: null, up: "intuition, dreams, uncertainty", rev: "clarity emerging, released fear, confusion lifting", phrase: "a time of dreams and uncertainty where intuition lights the way" },
+  { name: "The Sun", arcana: "major", num: "XIX", suit: null, up: "joy, vitality, success", rev: "dimmed enthusiasm, temporary clouds, delayed happiness", phrase: "warmth, joy, and a bright sense of confidence" },
+  { name: "Judgement", arcana: "major", num: "XX", suit: null, up: "reflection, awakening, a calling", rev: "self-doubt, avoiding the call, harsh self-criticism", phrase: "an awakening that invites you to answer a deeper calling" },
+  { name: "The World", arcana: "major", num: "XXI", suit: null, up: "completion, fulfillment, wholeness", rev: "loose ends, delays, almost finished", phrase: "the satisfying completion of a cycle and a sense of wholeness" },
+  { name: "Ace of Wands", arcana: "minor", num: "A", suit: "wands", up: "inspiration, new energy, creative spark", rev: "delays, lack of motivation, a dim spark", phrase: "a spark of inspiration ready to be turned into action" },
+  { name: "Two of Wands", arcana: "minor", num: "2", suit: "wands", up: "planning, vision, future goals", rev: "indecision, fear of the unknown, playing it small", phrase: "planning ahead and weighing the bigger vision for your future" },
+  { name: "Three of Wands", arcana: "minor", num: "3", suit: "wands", up: "expansion, foresight, progress", rev: "delays, obstacles, waiting longer than hoped", phrase: "growth on the horizon as your earlier efforts begin to pay off" },
+  { name: "Four of Wands", arcana: "minor", num: "4", suit: "wands", up: "celebration, community, homecoming", rev: "instability, tension at home, uncertain belonging", phrase: "a joyful celebration with the people who make you feel at home" },
+  { name: "Five of Wands", arcana: "minor", num: "5", suit: "wands", up: "competition, friction, differing opinions", rev: "resolving conflict, avoiding tension, finding common ground", phrase: "friendly competition and the lively clash of differing ideas" },
+  { name: "Six of Wands", arcana: "minor", num: "6", suit: "wands", up: "victory, recognition, confidence", rev: "self-doubt, delayed recognition, pride", phrase: "well-earned recognition and the confidence that follows a success" },
+  { name: "Seven of Wands", arcana: "minor", num: "7", suit: "wands", up: "defending your position, perseverance, conviction", rev: "exhaustion, giving way, feeling overwhelmed", phrase: "standing your ground and staying true to your convictions" },
+  { name: "Eight of Wands", arcana: "minor", num: "8", suit: "wands", up: "speed, swift progress, news arriving", rev: "delays, frustration, scattered momentum", phrase: "swift movement and quick progress as things fall into place" },
+  { name: "Nine of Wands", arcana: "minor", num: "9", suit: "wands", up: "resilience, persistence, last stretch", rev: "fatigue, defensiveness, near burnout", phrase: "the resilience to keep going through the final stretch" },
+  { name: "Ten of Wands", arcana: "minor", num: "10", suit: "wands", up: "heavy responsibility, hard work, commitment", rev: "letting go, delegating, setting burdens down", phrase: "a heavy load that invites you to share the weight" },
+  { name: "Page of Wands", arcana: "minor", num: "P", suit: "wands", up: "curiosity, enthusiasm, new ideas", rev: "restlessness, hesitation, unfinished plans", phrase: "curious enthusiasm for a bold new idea worth exploring" },
+  { name: "Knight of Wands", arcana: "minor", num: "Kn", suit: "wands", up: "energy, adventure, passion", rev: "impulsiveness, impatience, scattered drive", phrase: "bold, adventurous energy that pushes you into motion" },
+  { name: "Queen of Wands", arcana: "minor", num: "Q", suit: "wands", up: "confidence, warmth, determination", rev: "insecurity, withdrawal, wavering spirit", phrase: "warm confidence that draws others toward your passion" },
+  { name: "King of Wands", arcana: "minor", num: "K", suit: "wands", up: "leadership, vision, bold action", rev: "overbearing, impatience, unrealistic expectations", phrase: "visionary leadership that turns a big idea into reality" },
+  { name: "Ace of Cups", arcana: "minor", num: "A", suit: "cups", up: "new love, emotional openness, compassion", rev: "emotional blockage, guarded feelings, held-back love", phrase: "an open heart and the start of something emotionally rich" },
+  { name: "Two of Cups", arcana: "minor", num: "2", suit: "cups", up: "partnership, mutual attraction, connection", rev: "imbalance, miscommunication, drifting apart", phrase: "a balanced partnership built on mutual respect and affection" },
+  { name: "Three of Cups", arcana: "minor", num: "3", suit: "cups", up: "friendship, celebration, community", rev: "overindulgence, gossip, feeling left out", phrase: "joyful friendship and the pleasure of celebrating together" },
+  { name: "Four of Cups", arcana: "minor", num: "4", suit: "cups", up: "contemplation, apathy, reevaluation", rev: "renewed interest, awareness, accepting an offer", phrase: "a thoughtful pause to reconsider what you really want" },
+  { name: "Five of Cups", arcana: "minor", num: "5", suit: "cups", up: "grief, regret, looking back", rev: "acceptance, moving on, finding hope again", phrase: "honest mourning of a loss and the hope that remains" },
+  { name: "Six of Cups", arcana: "minor", num: "6", suit: "cups", up: "nostalgia, childhood memories, kindness", rev: "stuck in the past, unrealistic memories, moving forward", phrase: "tender nostalgia and the simple kindness of old memories" },
+  { name: "Seven of Cups", arcana: "minor", num: "7", suit: "cups", up: "choices, imagination, wishful thinking", rev: "clarity, decisiveness, seeing through illusions", phrase: "a wide field of dreams and the need to choose wisely" },
+  { name: "Eight of Cups", arcana: "minor", num: "8", suit: "cups", up: "walking away, seeking meaning, moving on", rev: "fear of leaving, drifting, avoiding change", phrase: "the courage to walk away in search of deeper meaning" },
+  { name: "Nine of Cups", arcana: "minor", num: "9", suit: "cups", up: "contentment, satisfaction, wishes fulfilled", rev: "dissatisfaction, smugness, hollow pleasure", phrase: "quiet contentment and the satisfaction of a wish fulfilled" },
+  { name: "Ten of Cups", arcana: "minor", num: "10", suit: "cups", up: "family harmony, lasting happiness, emotional fulfillment", rev: "strained relationships, disconnection, unmet ideals", phrase: "lasting happiness shared with the people you love" },
+  { name: "Page of Cups", arcana: "minor", num: "P", suit: "cups", up: "sensitivity, creative inspiration, a sweet message", rev: "emotional immaturity, mood swings, creative block", phrase: "a gentle, imaginative message that stirs your creative heart" },
+  { name: "Knight of Cups", arcana: "minor", num: "Kn", suit: "cups", up: "romance, charm, following your heart", rev: "moodiness, unrealistic expectations, overidealizing", phrase: "a romantic offering and the call to follow your heart" },
+  { name: "Queen of Cups", arcana: "minor", num: "Q", suit: "cups", up: "compassion, emotional depth, intuition", rev: "emotional overwhelm, dependence, blurred boundaries", phrase: "compassionate emotional depth that offers comfort and understanding" },
+  { name: "King of Cups", arcana: "minor", num: "K", suit: "cups", up: "emotional balance, diplomacy, calm wisdom", rev: "mood swings, suppressed feelings, emotional distance", phrase: "calm emotional balance and the wisdom to lead with kindness" },
+  { name: "Ace of Swords", arcana: "minor", num: "A", suit: "swords", up: "clarity, truth, a breakthrough", rev: "confusion, clouded thinking, unclear ideas", phrase: "a breakthrough of clarity that cuts through the confusion" },
+  { name: "Two of Swords", arcana: "minor", num: "2", suit: "swords", up: "a difficult choice, stalemate, balance", rev: "indecision, information coming out, release of tension", phrase: "a pause at a crossroads where a hard choice awaits" },
+  { name: "Three of Swords", arcana: "minor", num: "3", suit: "swords", up: "heartache, sorrow, honest grief", rev: "healing, forgiveness, recovering from pain", phrase: "honest sorrow that must be felt before healing can begin" },
+  { name: "Four of Swords", arcana: "minor", num: "4", suit: "swords", up: "rest, recovery, quiet restoration", rev: "restlessness, burnout, returning to activity", phrase: "a much-needed rest that restores your mind and body" },
+  { name: "Five of Swords", arcana: "minor", num: "5", suit: "swords", up: "conflict, hollow victory, tension", rev: "reconciliation, regret, letting the conflict go", phrase: "a conflict that asks what winning is really worth" },
+  { name: "Six of Swords", arcana: "minor", num: "6", suit: "swords", up: "transition, moving on, calmer waters", rev: "resistance to moving on, unresolved baggage, delays", phrase: "a gentle passage toward calmer waters and a fresh start" },
+  { name: "Seven of Swords", arcana: "minor", num: "7", suit: "swords", up: "strategy, stealth, acting alone", rev: "coming clean, conscience, being found out", phrase: "a careful strategy and the question of honest dealing" },
+  { name: "Eight of Swords", arcana: "minor", num: "8", suit: "swords", up: "feeling trapped, self-imposed limits, restriction", rev: "release, new perspective, freeing yourself", phrase: "limits that feel real but may be loosened by a fresh view" },
+  { name: "Nine of Swords", arcana: "minor", num: "9", suit: "swords", up: "anxiety, worry, sleepless nights", rev: "relief, hope returning, facing your fears", phrase: "heavy worries that grow lighter once you speak them aloud" },
+  { name: "Ten of Swords", arcana: "minor", num: "10", suit: "swords", up: "a painful ending, release, hitting bottom", rev: "recovery, slow healing, learning from the past", phrase: "a painful ending that finally clears the way for renewal" },
+  { name: "Page of Swords", arcana: "minor", num: "P", suit: "swords", up: "curiosity, sharp thinking, new ideas", rev: "hasty words, scattered thoughts, gossip", phrase: "sharp curiosity and a hunger to learn something new" },
+  { name: "Knight of Swords", arcana: "minor", num: "Kn", suit: "swords", up: "ambition, quick action, directness", rev: "impulsiveness, bluntness, rushing ahead", phrase: "fast-moving ambition that needs a steady and thoughtful aim" },
+  { name: "Queen of Swords", arcana: "minor", num: "Q", suit: "swords", up: "clear thinking, honesty, independence", rev: "coldness, guardedness, overly harsh judgment", phrase: "clear-eyed honesty delivered with independence and a sharp mind" },
+  { name: "King of Swords", arcana: "minor", num: "K", suit: "swords", up: "intellect, fairness, reasoned authority", rev: "rigid thinking, detachment, misuse of authority", phrase: "fair, reasoned judgment grounded in knowledge and integrity" },
+  { name: "Ace of Pentacles", arcana: "minor", num: "A", suit: "pentacles", up: "new opportunity, prosperity, a solid start", rev: "missed chance, poor planning, shaky footing", phrase: "a promising opportunity with solid ground beneath it" },
+  { name: "Two of Pentacles", arcana: "minor", num: "2", suit: "pentacles", up: "balancing priorities, adaptability, juggling tasks", rev: "overwhelm, disorganization, stretched too thin", phrase: "the graceful juggling of competing priorities with a flexible mind" },
+  { name: "Three of Pentacles", arcana: "minor", num: "3", suit: "pentacles", up: "teamwork, craftsmanship, collaboration", rev: "disharmony, poor teamwork, lack of effort", phrase: "teamwork and skilled craft that build something lasting together" },
+  { name: "Four of Pentacles", arcana: "minor", num: "4", suit: "pentacles", up: "security, saving, holding on", rev: "generosity, loosening your grip, overspending", phrase: "a careful grip on security and the question of when to loosen it" },
+  { name: "Five of Pentacles", arcana: "minor", num: "5", suit: "pentacles", up: "hardship, feeling left out, need for support", rev: "recovery, help arriving, improving circumstances", phrase: "a lean season that reminds you help is closer than it seems" },
+  { name: "Six of Pentacles", arcana: "minor", num: "6", suit: "pentacles", up: "generosity, sharing, fair exchange", rev: "strings attached, imbalance, uneven giving", phrase: "generosity and the fair, open-handed sharing of resources" },
+  { name: "Seven of Pentacles", arcana: "minor", num: "7", suit: "pentacles", up: "patience, long-term effort, assessing progress", rev: "impatience, doubts about results, poor returns", phrase: "patient tending of long-term effort while you wait for growth" },
+  { name: "Eight of Pentacles", arcana: "minor", num: "8", suit: "pentacles", up: "diligence, skill building, dedication", rev: "perfectionism, boredom, lack of focus", phrase: "steady dedication to learning and improving your craft" },
+  { name: "Nine of Pentacles", arcana: "minor", num: "9", suit: "pentacles", up: "self-reliance, comfort, earned rewards", rev: "overworking, dependence, insecure finances", phrase: "comfortable independence and the quiet reward of your own effort" },
+  { name: "Ten of Pentacles", arcana: "minor", num: "10", suit: "pentacles", up: "legacy, family security, lasting wealth", rev: "family friction, unstable foundations, financial worries", phrase: "a lasting legacy and the security of a well-built foundation" },
+  { name: "Page of Pentacles", arcana: "minor", num: "P", suit: "pentacles", up: "study, ambition, a practical new start", rev: "procrastination, lack of focus, unrealistic plans", phrase: "a practical new start and the eagerness to learn" },
+  { name: "Knight of Pentacles", arcana: "minor", num: "Kn", suit: "pentacles", up: "reliability, hard work, steady progress", rev: "stagnation, stubbornness, perfectionism", phrase: "dependable, steady effort that wins through patience and persistence" },
+  { name: "Queen of Pentacles", arcana: "minor", num: "Q", suit: "pentacles", up: "nurturing, practicality, abundance", rev: "self-neglect, overwork, imbalance at home", phrase: "practical care that makes a comfortable and abundant home" },
+  { name: "King of Pentacles", arcana: "minor", num: "K", suit: "pentacles", up: "prosperity, stability, generous leadership", rev: "greed, stubbornness, overemphasis on material things", phrase: "grounded prosperity and the steady leadership of a patient provider" }
+  ];
+
+  /* =========================================================
+     Almanac · Sky horoscope · Daily tarot
+     ========================================================= */
+  const MYSTIC_NOTE = "For fun and tradition only. Astrology and tarot aren't scientific predictions.";
+
+  // seeded random so a given date gives everyone the same draw / lore
+  function seededRandom(str) {
+    let h = 1779033703 ^ str.length;
+    for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+    return () => { h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); h ^= h >>> 16; return (h >>> 0) / 4294967296; };
+  }
+  const localDateKey = () => { const z = zoneParts(new Date(), tz()); return `${z.year}-${String(z.month).padStart(2, "0")}-${String(z.day).padStart(2, "0")}`; };
+
+  /* ---------- almanac ---------- */
+  const MOON_NAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"];
+  const SHOWERS = [ // [name, month, day of peak, typical meteors/hour at best]
+    ["Quadrantids", 1, 3, 110], ["Lyrids", 4, 22, 18], ["Eta Aquariids", 5, 6, 50], ["Southern Delta Aquariids", 7, 30, 20],
+    ["Perseids", 8, 12, 100], ["Draconids", 10, 8, 10], ["Orionids", 10, 21, 20], ["Leonids", 11, 17, 15], ["Geminids", 12, 14, 150], ["Ursids", 12, 22, 10]];
+  const CROSS_QUARTER = [["Imbolc", 2, 1, "halfway from winter to spring; Groundhog Day and Candlemas come from it"], ["Beltane", 5, 1, "halfway from spring to summer; the old May Day festival"],
+    ["Lughnasadh", 8, 1, "halfway from summer to autumn; the first-harvest festival (Lammas)"], ["Samhain", 11, 1, "halfway from autumn to winter; the root of Halloween"]];
+  const LORE = {
+    1: ["If the grass grows in January, it will grow badly all year.", "A January spring is worth nothing."],
+    2: ["If Candlemas Day be fair and bright, winter will have another flight.", "When the wind's in the east, it's neither good for man nor beast."],
+    3: ["March comes in like a lion and goes out like a lamb.", "A peck of March dust is worth a king's ransom."],
+    4: ["April showers bring May flowers.", "When April blows his horn, it's good for hay and corn."],
+    5: ["Ne'er cast a clout till May be out.", "A cold May is kindly and fills the barn finely."],
+    6: ["A dripping June sets all in tune.", "Calm weather in June sets corn in tune."],
+    7: ["If the first of July be rainy weather, it will rain more or less for four weeks together.", "Ants are very busy before a rain."],
+    8: ["Dry August and warm doth harvest no harm.", "When the dew is on the grass, rain will never come to pass."],
+    9: ["Fair on September first, fair for the month.", "Heavy September rains bring drought."],
+    10: ["Much rain in October, much wind in December.", "A good October and a good blast, to blow the hog acorn and mast."],
+    11: ["If there's ice in November that will bear a duck, there'll be nothing after but sludge and muck.", "Flowers bloom in late autumn, a sign of a bad winter."],
+    12: ["Thunder in December presages fine weather.", "A green Christmas makes a fat churchyard."],
+    any: ["Red sky at night, sailor's delight; red sky at morning, sailors take warning.", "Ring around the moon, rain real soon.", "When leaves show their undersides, be very sure that rain betides.", "Clear moon, frost soon.", "Mackerel sky and mares' tails make tall ships carry low sails.", "When the wind is in the west, the weather's at its best."]
+  };
+  function almanacData() {
+    const now = new Date(), zone = tz(), z = zoneParts(now, zone), rnd = seededRandom("lore" + localDateKey());
+    const full = astro.nextPhase(now, 0.5);
+    let moonName = null, blue = false;
+    if (full) {
+      const fz = zoneParts(full, zone);
+      moonName = MOON_NAMES[fz.month - 1];
+      // Harvest Moon = full moon nearest the September equinox
+      const sep = seasonMarks(fz.year)[2];
+      if (Math.abs(full - sep) < 15.5 * 864e5) moonName = "Harvest Moon";
+      // blue moon: a second full moon in the same calendar month
+      const prevFull = astro.nextPhase(new Date(full - 32 * 864e5), 0.5);
+      if (prevFull && full - prevFull > 20 * 864e5) { const pz = zoneParts(prevFull, zone); blue = pz.month === fz.month && pz.year === fz.year; }
+    }
+    // next meteor shower peak (within the next ~60 days)
+    let shower = null;
+    for (let add = 0; add < 2 && !shower; add++) for (const s of SHOWERS) {
+      const peak = zoneDayInstant(new Date(Date.UTC(z.year + add, s[1] - 1, s[2], 12)), zone, 2);
+      if (peak > now - 864e5 && peak - now < 60 * 864e5 && (!shower || peak < shower.peak)) shower = { name: s[0], peak, zhr: s[3], moon: astro.moonIllumination(peak).fraction };
+    }
+    // next cross-quarter day
+    let cq = null;
+    for (let add = 0; add < 2 && !cq; add++) for (const c of CROSS_QUARTER) {
+      const d = new Date(Date.UTC(z.year + add, c[1] - 1, c[2], 12));
+      if (d > now - 864e5 && (!cq || d < cq.d)) cq = { name: c[0], d, note: c[3] };
+    }
+    const pool = [...LORE[z.month], ...LORE.any], lore = pool[Math.floor(rnd() * pool.length)];
+    const start = Date.UTC(z.year, 0, 1), doy = Math.floor((Date.UTC(z.year, z.month - 1, z.day) - start) / 864e5) + 1;
+    const len = (z.year % 4 === 0 && z.year % 100 !== 0) || z.year % 400 === 0 ? 366 : 365;
+    return { full, moonName, blue, shower, cq, lore, doy, len };
+  }
+  function wAlmanac() {
+    const a = almanacData(), zone = tz();
+    const df = d => new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric", timeZone: zone }).format(d);
+    const days = d => Math.max(0, Math.ceil((d - new Date()) / 864e5));
+    const showerTxt = a.shower ? `${a.shower.name} peak ${df(a.shower.peak)} · up to ~${a.shower.zhr}/hr${a.shower.moon > 0.6 ? ", bright moon will wash many out" : a.shower.moon < 0.3 ? ", dark skies" : ""}` : "No major shower in the next two months";
+    const row = (k, v, sub) => `<div class="alm-row"><span class="k">${k}</span><div>${v}${sub ? `<div class="tiny muted">${sub}</div>` : ""}</div></div>`;
+    return `<div class="alm-quote">“${esc(a.lore)}”<span class="tiny muted"> · weather lore</span></div>
+      ${row("Full moon", a.full ? `<b>${esc(a.blue ? "Blue Moon" : a.moonName)}</b> · ${esc(df(a.full))} <span class="muted">(${days(a.full)}d)</span>` : "—", a.blue ? `A second full moon this month (traditionally the ${esc(a.moonName)})` : "")}
+      ${row("Meteors", esc(showerTxt))}
+      ${row("Old calendar", a.cq ? `<b>${esc(a.cq.name)}</b> · ${esc(new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" }).format(a.cq.d))} <span class="muted">(${days(a.cq.d)}d)</span>` : "—", a.cq ? esc(a.cq.note) : "")}
+      ${row("Year", `Day <b>${a.doy}</b> of ${a.len}`, `${Math.round(a.doy / a.len * 100)}% of the year gone`)}`;
+  }
+
+  /* ---------- sky horoscope ---------- */
+  const SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+  const SIGN_GLYPH = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"].map(g => g + "︎");
+  const ELEMENT = ["fire", "earth", "air", "water"];
+  const SIGN_FOCUS = ["courage and fresh starts", "comfort, patience and the senses", "ideas, talk and curiosity", "home, family and feelings", "creativity, pride and play", "detail, health and getting organised",
+    "balance, partners and fairness", "depth, intensity and what's hidden", "adventure, big ideas and honesty", "ambition, structure and the long game", "friends, causes and the unconventional", "dreams, empathy and imagination"];
+  const MOON_MOOD = ["impatient and energetic; good for starting things, quick tempers", "steady and sensual; good food and unhurried pleasures", "chatty and restless; messages, errands and changing your mind",
+    "tender and homebound; moods run close to the surface", "warm and expressive; a day to be seen and to celebrate", "practical and fussy; satisfying for chores and fixing things",
+    "sociable and diplomatic; good for meetings and making peace", "private and intense; strong feelings and sharp intuition", "upbeat and wandering; plans, travel and saying what you think",
+    "serious and focused; good for work that needs discipline", "detached and inventive; groups, odd ideas and independence", "soft and dreamy; art, rest and blurred boundaries"];
+  const BODIES = [ // id, label, glyph, what it rules
+    ["sun", "Sun", "☉", "identity and vitality"], ["moon", "Moon", "☽", "feelings and instincts"], ["mercury", "Mercury", "☿", "thinking and communication"], ["venus", "Venus", "♀", "love, beauty and money"],
+    ["mars", "Mars", "♂", "drive and conflict"], ["jupiter", "Jupiter", "♃", "growth and luck"], ["saturn", "Saturn", "♄", "discipline and limits"], ["uranus", "Uranus", "♅", "surprise and change"],
+    ["neptune", "Neptune", "♆", "dreams and illusion"], ["pluto", "Pluto", "♇", "power and transformation"]];
+  const ASPECTS = [[0, 8, "conjunct", "merges with", "#a855f7"], [60, 4, "sextile", "opens doors for", "#22c55e"], [90, 6, "square", "clashes with", "#ef4444"], [120, 6, "trine", "flows easily with", "#3b82f6"], [180, 8, "opposite", "pulls against", "#f97316"]];
+  const RETRO_NOTE = { mercury: "double-check messages, travel plans and tech", venus: "old flames and spending habits come up for review", mars: "energy turns inward; slow, careful effort beats force",
+    jupiter: "growth is inner rather than outer", saturn: "a time to rework commitments", uranus: "change brews quietly", neptune: "illusions start to clear", pluto: "deep habits come up for review" };
+  function skyChart(date) {
+    const d = date || new Date();
+    const pos = BODIES.map(([id, label, glyph, rules]) => {
+      const lon = id === "sun" ? planets.sunLongitude(d) : id === "moon" ? planets.moonLongitude(d) : planets.longitude(id, d);
+      let retro = false;
+      if (id !== "sun" && id !== "moon") { const l2 = planets.longitude(id, new Date(d.valueOf() + 864e5)); retro = ((l2 - lon + 540) % 360 - 180) < 0; }
+      return { id, label, glyph, rules, lon, sign: Math.floor(lon / 30), deg: lon % 30, retro };
+    });
+    const asp = [];
+    for (let i = 0; i < pos.length; i++) for (let j = i + 1; j < pos.length; j++) {
+      const a = pos[i], b = pos[j]; if (i >= 7 && j >= 7) continue;   // skip slow outer-planet pairs that last for years
+      const sep = Math.abs(((a.lon - b.lon + 540) % 360) - 180), ang = 180 - sep;
+      for (const [deg, orb, name, verb, color] of ASPECTS) if (Math.abs(ang - deg) <= orb) asp.push({ a, b, name, verb, color, orb: Math.abs(ang - deg) });
+    }
+    asp.sort((x, y) => x.orb - y.orb);
+    const elements = [0, 0, 0, 0]; pos.slice(0, 7).forEach(p => elements[p.sign % 4]++);
+    return { pos, asp, elements };
+  }
+  function horoscopeText(ch) {
+    const sun = ch.pos[0], moon = ch.pos[1], ill = astro.moonIllumination(new Date());
+    const lines = [];
+    lines.push(`The Sun in ${SIGNS[sun.sign]} puts the season's focus on ${SIGN_FOCUS[sun.sign]}.`);
+    lines.push(`With the Moon in ${SIGNS[moon.sign]}, the mood is ${MOON_MOOD[moon.sign]}.`);
+    const phase = ill.phase < 0.5 ? "waxing, a time for building and beginning" : "waning, a time for finishing and letting go";
+    lines.push(`The Moon is ${phase}.`);
+    ch.asp.slice(0, 3).forEach(x => lines.push(`${x.a.label} ${x.verb} ${x.b.label}, linking ${x.a.rules} with ${x.b.rules}.`));
+    const rx = ch.pos.filter(p => p.retro && RETRO_NOTE[p.id]);
+    if (rx.length) lines.push(`Retrograde: ${rx.map(p => `${p.label} (${RETRO_NOTE[p.id]})`).join("; ")}.`);
+    const dom = ch.elements.indexOf(Math.max(...ch.elements));
+    lines.push(`Most of the inner sky sits in ${ELEMENT[dom]} signs, so the day leans ${["bold and active", "grounded and practical", "social and mental", "emotional and intuitive"][dom]}.`);
+    return lines;
+  }
+  function wHoroscope() {
+    const ch = skyChart(), S = 300, C = 150, R1 = 140, R2 = 112, R3 = 84;
+    const pt = (lon, r) => { const a = (180 - lon) * Math.PI / 180; return [C + r * Math.cos(a), C - r * Math.sin(a)]; };   // 0° Aries at the left, counter-clockwise
+    let wheel = `<circle cx="${C}" cy="${C}" r="${R1}" fill="none" stroke="currentColor" stroke-opacity=".25"/><circle cx="${C}" cy="${C}" r="${R2}" fill="none" stroke="currentColor" stroke-opacity=".25"/><circle cx="${C}" cy="${C}" r="${R3}" fill="none" stroke="currentColor" stroke-opacity=".15"/>`;
+    for (let i = 0; i < 12; i++) {
+      const [x1, y1] = pt(i * 30, R2), [x2, y2] = pt(i * 30, R1), [gx, gy] = pt(i * 30 + 15, (R1 + R2) / 2);
+      wheel += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="currentColor" stroke-opacity=".25"/><text x="${gx}" y="${gy + 5}" text-anchor="middle" font-size="17" fill="${["#ef4444", "#16a34a", "#0ea5e9", "#6366f1"][i % 4]}">${SIGN_GLYPH[i]}</text>`;
+    }
+    ch.asp.forEach(x => { const [x1, y1] = pt(x.a.lon, R3), [x2, y2] = pt(x.b.lon, R3); wheel += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${x.color}" stroke-opacity=".55" stroke-width="1.3"/>`; });
+    // spread planets that sit on top of each other
+    const placed = [...ch.pos].sort((a, b) => a.lon - b.lon).map(p => ({ p, at: p.lon }));
+    for (let k = 0; k < 3; k++) for (let i = 1; i < placed.length; i++) if (placed[i].at - placed[i - 1].at < 11) placed[i].at = placed[i - 1].at + 11;
+    placed.forEach(({ p, at }) => {
+      const [x, y] = pt(at, (R2 + R3) / 2 + 2), [tx, ty] = pt(p.lon, R3);
+      wheel += `<circle cx="${tx}" cy="${ty}" r="2" fill="currentColor" opacity=".5"/><text x="${x}" y="${y + 7}" text-anchor="middle" font-size="19" font-weight="700" fill="currentColor">${p.glyph}</text>${p.retro ? `<text x="${x + 9}" y="${y + 12}" font-size="8" font-weight="700" fill="#ef4444">R</text>` : ""}`;
+    });
+    const list = ch.pos.map(p => `<div class="pl-row"><span class="g">${p.glyph}</span><span>${p.label}</span><span class="soft">${SIGNS[p.sign]} ${Math.floor(p.deg)}°${p.retro ? " <span class=\"rx\">Rx</span>" : ""}</span></div>`).join("");
+    return `<div class="horo-wrap">
+        <svg viewBox="0 0 ${S} ${S}" class="horo-wheel" style="color:var(--ink)" role="img" aria-label="Today's sky chart">${wheel}</svg>
+        <div class="pl-list">${list}</div>
+      </div>
+      <div class="horo-text">${horoscopeText(ch).map(l => `<p>${esc(l)}</p>`).join("")}</div>
+      <div class="mystic-note">${MYSTIC_NOTE}</div>`;
+  }
+
+  /* ---------- daily tarot (5-card spread) ---------- */
+  const SPREAD = ["The day's theme", "What helps", "What challenges", "Advice", "Where it's heading"];
+  const SUIT = { wands: ["♣", "#ea580c", "energy, work and ambition"], cups: ["♥", "#2563eb", "feelings and relationships"], swords: ["♠", "#64748b", "thoughts, decisions and conflict"], pentacles: ["♦", "#ca8a04", "money, body and practical matters"] };
+  function tarotDraw() {
+    const rnd = seededRandom("tarot" + localDateKey()), deck = TAROT.map((c, i) => i);
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+    return deck.slice(0, 5).map((i, k) => ({ ...TAROT[i], reversed: rnd() < 0.3, pos: SPREAD[k] }));
+  }
+  const firstKw = s => s.split(",")[0].trim();
+  function tarotReading(cards) {
+    const majors = cards.filter(c => c.arcana === "major").length, rev = cards.filter(c => c.reversed).length;
+    const suits = {}; cards.forEach(c => c.suit && (suits[c.suit] = (suits[c.suit] || 0) + 1));
+    const top = Object.entries(suits).sort((a, b) => b[1] - a[1])[0];
+    const out = [];
+    out.push(majors >= 3 ? `With ${majors} Major Arcana cards, this is read as a day where bigger forces and turning points are in play.`
+      : majors === 0 ? "No Major Arcana appear, so the day is read as down-to-earth: everyday choices matter more than fate."
+      : `${majors === 1 ? "One Major Arcana card" : "Two Major Arcana cards"} mark${majors === 1 ? "s" : ""} where the day's real weight lies.`);
+    const NUMW = ["", "One", "Two", "Three", "Four", "Five"];
+    if (top && top[1] >= 2) out.push(`${NUMW[top[1]]} ${top[0][0].toUpperCase() + top[0].slice(1)} cards point the day toward ${SUIT[top[0]][2]}.`);
+    if (rev >= 3) out.push("Several reversed cards suggest delays, second thoughts or energy turned inward.");
+    const [t, h, ch, adv, end] = cards;
+    const kw = c => c.reversed ? firstKw(c.rev) : firstKw(c.up);
+    out.push(`The theme is ${t.reversed ? "a blocked or inward version of " : ""}${t.phrase} (${t.name}${t.reversed ? ", reversed" : ""}).`);
+    const R = c => c.reversed ? " (reversed)" : "";
+    out.push(h.reversed ? `Help comes from facing ${kw(h)} head-on (${h.name}, reversed).` : `${h.name} is on your side: lean on ${kw(h)}.`);
+    out.push(`The friction comes from ${ch.name}${R(ch)}, so watch for ${kw(ch)}.`);
+    out.push(adv.reversed ? `The advice card, ${adv.name} reversed, warns against ${kw(adv)}.` : `The advice card, ${adv.name}, says to focus on ${kw(adv)}.`);
+    out.push(end.reversed ? `Left unchecked, things could drift toward ${kw(end)} (${end.name}, reversed), so the advice matters.` : `If you follow it, the day is heading toward ${kw(end)} (${end.name}).`);
+    return out;
+  }
+  function tarotCardSVG(c) {
+    const suit = c.suit ? SUIT[c.suit] : null, col = suit ? suit[1] : "#7c3aed";
+    const SUIT_PATH = {
+      cups: "M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z",
+      pentacles: "M12 2l7.5 10L12 22 4.5 12z",
+      swords: "M12 2s8 6.5 8 11.5a4 4 0 0 1-6.6 3L14.2 21H9.8l.8-4.5A4 4 0 0 1 4 13.5C4 8.5 12 2 12 2z",
+      wands: "M12 2.5a3.8 3.8 0 0 1 3.4 5.6 3.8 3.8 0 1 1-1.9 6.6L14.4 21H9.6l.9-6.3a3.8 3.8 0 1 1-1.9-6.6A3.8 3.8 0 0 1 12 2.5z" };
+    const centre = suit ? `<path d="${SUIT_PATH[c.suit]}" transform="translate(32 62) scale(1.5)" fill="${col}"/>`
+      : `<circle cx="50" cy="80" r="24" fill="none" stroke="${col}" stroke-width="2"/><circle cx="50" cy="80" r="14" fill="${col}" opacity=".18"/><text x="50" y="87" text-anchor="middle" font-size="18" font-weight="700" fill="${col}">✦</text>`;
+    const words = c.name.replace(/^The /, "").split(" "), lines = []; let cur = "";
+    words.forEach(w => { if ((cur + " " + w).trim().length > 11) { lines.push(cur.trim()); cur = w; } else cur += " " + w; }); lines.push(cur.trim());
+    return `<svg viewBox="0 0 100 160" class="tcard${c.reversed ? " rev" : ""}">
+      <rect x="2" y="2" width="96" height="156" rx="9" fill="#fffdf7" stroke="${col}" stroke-width="2"/>
+      <rect x="8" y="8" width="84" height="144" rx="6" fill="none" stroke="${col}" stroke-opacity=".35"/>
+      <text x="50" y="28" text-anchor="middle" font-size="13" font-weight="800" fill="${col}">${esc(c.num)}</text>
+      ${centre}
+      ${lines.map((l, i) => `<text x="50" y="${128 + i * 12 - (lines.length - 1) * 6}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f2937">${esc(l)}</text>`).join("")}
+    </svg>`;
+  }
+  function wTarot() {
+    const cards = tarotDraw();
+    const row = cards.map(c => `<figure class="tslot">${tarotCardSVG(c)}<figcaption><span class="tpos">${esc(c.pos)}</span><b>${esc(c.name)}${c.reversed ? " ↺" : ""}</b><span class="tiny muted">${esc(c.reversed ? c.rev : c.up)}</span></figcaption></figure>`).join("");
+    return `<div class="trow">${row}</div>
+      <div class="horo-text" style="margin-top:12px">${tarotReading(cards).map(l => `<p>${esc(l)}</p>`).join("")}</div>
+      <div class="mystic-note">Same draw for everyone today; a new spread at midnight. ↺ = reversed. ${MYSTIC_NOTE}</div>`;
+  }
+
+  const RENDER = { now: wNow, hourly: wHourly, daily: wDaily, air: wAir, sun: wSun, moon: wMoon, tides: wTides, sky: wSky, almanac: wAlmanac, horoscope: wHoroscope, tarot: wTarot };
 
   /* =========================================================
      Layout rendering + arranging
@@ -1299,6 +1669,21 @@
       out.push("");
     }
 
+    { const a = almanacData(), df = d => new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: zone }).format(d);
+      out.push("ALMANAC", sub, `Weather lore: "${a.lore}"`,
+        `Next full moon: ${a.full ? (a.blue ? "Blue Moon" : a.moonName) + ", " + df(a.full) : "n/a"}`,
+        `Next meteor shower: ${a.shower ? `${a.shower.name}, peak ${df(a.shower.peak)}, up to ~${a.shower.zhr}/hr, moon ${Math.round(a.shower.moon * 100)}% lit` : "none in the next two months"}`,
+        `Next cross-quarter day: ${a.cq ? `${a.cq.name}, ${new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(a.cq.d)} (${a.cq.note})` : "n/a"}`,
+        `Day ${a.doy} of ${a.len}`, ""); }
+    { const ch = skyChart();
+      out.push("SKY HOROSCOPE (for fun)", sub);
+      ch.pos.forEach(pl => out.push(`  ${pl.label.padEnd(9)} ${SIGNS[pl.sign].padEnd(12)} ${Math.floor(pl.deg).toString().padStart(2)}°${pl.retro ? "  retrograde" : ""}`));
+      if (ch.asp.length) { out.push("", "Tightest aspects:"); ch.asp.slice(0, 5).forEach(x => out.push(`  ${x.a.label} ${x.name} ${x.b.label} (orb ${x.orb.toFixed(1)}°)`)); }
+      out.push("", ...horoscopeText(ch), ""); }
+    { const cards = tarotDraw();
+      out.push("DAILY TAROT (for fun)", sub);
+      cards.forEach((c, i) => out.push(`  ${i + 1}. ${c.pos}: ${c.name}${c.reversed ? " (reversed)" : ""}`, `     ${c.reversed ? c.rev : c.up}`));
+      out.push("", ...tarotReading(cards), "", MYSTIC_NOTE, ""); }
     out.push(line, "Weather and air quality: Open-Meteo.com (CC BY 4.0).", "Sun and moon: calculated in the browser; times are approximate to about a minute.", line, "");
     return out.join("\n");
   }
