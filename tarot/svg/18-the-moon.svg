@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320" class="tarot-card">
+  <defs>
+    <radialGradient id="bgt19" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#fffdf8"/><stop offset="1" stop-color="#fbf7ee"/></radialGradient>
+    <pattern id="ptt19" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r=".8" fill="#4c1d95" opacity=".10"/></pattern>
+  </defs>
+  <rect x="2" y="2" width="196" height="316" rx="14" fill="url(#bgt19)" stroke="#4c1d95" stroke-width="4"/>
+  <rect x="11" y="11" width="178" height="298" rx="8" fill="none" stroke="#c9a227" stroke-width="1.4"/>
+  <rect x="15" y="15" width="170" height="290" rx="6" fill="none" stroke="#c9a227" stroke-width=".6"/>
+  <path d="M24 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M24 291l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 291l5 5-5 5-5-5z" fill="#c9a227"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="#ede9fe"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="url(#ptt19)"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="none" stroke="#4c1d95" stroke-width="1.2" opacity=".35"/>
+  <circle cx="100" cy="36" r="17" fill="#4c1d95"/><circle cx="100" cy="36" r="14" fill="none" stroke="#c9a227" stroke-width="1"/>
+  <text x="100" y="40" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="700" fill="#fff" letter-spacing=".5">XVIII</text>
+  <g transform="translate(35 81) scale(1.3)"><circle cx="50" cy="38" r="24" fill="#c9a227"/><path d="M58 18a22 22 0 1 0 0 40 18 18 0 1 1 0-40z" fill="#4c1d95"/>
+      <path d="M77.0,38.0L83.0,38.0" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M74.9,48.3L80.5,50.6" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M69.1,57.1L73.3,61.3" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M60.3,62.9L62.6,68.5" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M50.0,65.0L50.0,71.0" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M39.7,62.9L37.4,68.5" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M30.9,57.1L26.7,61.3" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.1,48.3L19.5,50.6" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M23.0,38.0L17.0,38.0" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.1,27.7L19.5,25.4" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M30.9,18.9L26.7,14.7" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M39.7,13.1L37.4,7.5" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M50.0,11.0L50.0,5.0" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M60.3,13.1L62.6,7.5" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M69.1,18.9L73.3,14.7" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M74.9,27.7L80.5,25.4" fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M34 66c3 5 4 7 0 9-4-2-3-4 0-9z" fill="#4c1d95"/><path d="M50 72c3 5 4 7 0 9-4-2-3-4 0-9z" fill="#4c1d95"/><path d="M66 66c3 5 4 7 0 9-4-2-3-4 0-9z" fill="#4c1d95"/>
+      <path d="M14 90V68h8v22M78 90V68h8v22" fill="none" stroke="#4c1d95" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <path d="M18 250h164l-8 15 8 15H18l8-15z" fill="#4c1d95"/>
+  <text x="100" y="270" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing="1.2">THE MOON</text>
+  <text x="100" y="300" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="8" font-weight="700" fill="#4c1d95" letter-spacing="2" opacity=".75">MAJOR ARCANA</text>
+</svg>

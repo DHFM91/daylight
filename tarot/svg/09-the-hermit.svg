@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320" class="tarot-card">
+  <defs>
+    <radialGradient id="bgt10" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#fffdf8"/><stop offset="1" stop-color="#fbf7ee"/></radialGradient>
+    <pattern id="ptt10" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r=".8" fill="#4c1d95" opacity=".10"/></pattern>
+  </defs>
+  <rect x="2" y="2" width="196" height="316" rx="14" fill="url(#bgt10)" stroke="#4c1d95" stroke-width="4"/>
+  <rect x="11" y="11" width="178" height="298" rx="8" fill="none" stroke="#c9a227" stroke-width="1.4"/>
+  <rect x="15" y="15" width="170" height="290" rx="6" fill="none" stroke="#c9a227" stroke-width=".6"/>
+  <path d="M24 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M24 291l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 291l5 5-5 5-5-5z" fill="#c9a227"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="#ede9fe"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="url(#ptt10)"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="none" stroke="#4c1d95" stroke-width="1.2" opacity=".35"/>
+  <circle cx="100" cy="36" r="17" fill="#4c1d95"/><circle cx="100" cy="36" r="14" fill="none" stroke="#c9a227" stroke-width="1"/>
+  <text x="100" y="41.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing=".5">IX</text>
+  <g transform="translate(35 81) scale(1.3)"><path d="M30 10v80" fill="none" stroke="#4c1d95" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 20h20" fill="none" stroke="#4c1d95" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 20v8" fill="none" stroke="#4c1d95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M40 30h20l-3 34H43z" fill="#ede9fe" stroke="#4c1d95" stroke-width="2.6" stroke-linejoin="round"/><path d="M38 30h24M41 64h18" fill="none" stroke="#4c1d95" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M50.00,37.00L52.25,42.10L57.79,41.50L54.50,46.00L57.79,50.50L52.25,49.90L50.00,55.00L47.75,49.90L42.21,50.50L45.50,46.00L42.21,41.50L47.75,42.10Z" fill="#c9a227"/>
+      <path d="M70.0,46.0L76.0,46.0" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M64.1,60.1L68.4,64.4" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M50.0,66.0L50.0,72.0" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M35.9,60.1L31.6,64.4" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M30.0,46.0L24.0,46.0" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M35.9,31.9L31.6,27.6" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M50.0,26.0L50.0,20.0" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M64.1,31.9L68.4,27.6" fill="none" stroke="#c9a227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <path d="M18 250h164l-8 15 8 15H18l8-15z" fill="#4c1d95"/>
+  <text x="100" y="270" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing="1.2">THE HERMIT</text>
+  <text x="100" y="300" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="8" font-weight="700" fill="#4c1d95" letter-spacing="2" opacity=".75">MAJOR ARCANA</text>
+</svg>

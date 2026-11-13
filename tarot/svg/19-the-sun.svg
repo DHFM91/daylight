@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320" class="tarot-card">
+  <defs>
+    <radialGradient id="bgt20" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#fffdf8"/><stop offset="1" stop-color="#fbf7ee"/></radialGradient>
+    <pattern id="ptt20" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r=".8" fill="#4c1d95" opacity=".10"/></pattern>
+  </defs>
+  <rect x="2" y="2" width="196" height="316" rx="14" fill="url(#bgt20)" stroke="#4c1d95" stroke-width="4"/>
+  <rect x="11" y="11" width="178" height="298" rx="8" fill="none" stroke="#c9a227" stroke-width="1.4"/>
+  <rect x="15" y="15" width="170" height="290" rx="6" fill="none" stroke="#c9a227" stroke-width=".6"/>
+  <path d="M24 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M24 291l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 291l5 5-5 5-5-5z" fill="#c9a227"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="#ede9fe"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="url(#ptt20)"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="none" stroke="#4c1d95" stroke-width="1.2" opacity=".35"/>
+  <circle cx="100" cy="36" r="17" fill="#4c1d95"/><circle cx="100" cy="36" r="14" fill="none" stroke="#c9a227" stroke-width="1"/>
+  <text x="100" y="41.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing=".5">XIX</text>
+  <g transform="translate(35 81) scale(1.3)"><path d="M73.8,45.1L92.0,48.0L73.8,50.9Z" fill="#c9a227"/><path d="M73.1,54.5L83.3,61.8L70.9,59.8Z" fill="#4c1d95"/><path d="M68.9,62.8L79.7,77.7L64.8,66.9Z" fill="#c9a227"/><path d="M61.8,68.9L63.8,81.3L56.5,71.1Z" fill="#4c1d95"/><path d="M52.9,71.8L50.0,90.0L47.1,71.8Z" fill="#c9a227"/><path d="M43.5,71.1L36.2,81.3L38.2,68.9Z" fill="#4c1d95"/><path d="M35.2,66.9L20.3,77.7L31.1,62.8Z" fill="#c9a227"/><path d="M29.1,59.8L16.7,61.8L26.9,54.5Z" fill="#4c1d95"/><path d="M26.2,50.9L8.0,48.0L26.2,45.1Z" fill="#c9a227"/><path d="M26.9,41.5L16.7,34.2L29.1,36.2Z" fill="#4c1d95"/><path d="M31.1,33.2L20.3,18.3L35.2,29.1Z" fill="#c9a227"/><path d="M38.2,27.1L36.2,14.7L43.5,24.9Z" fill="#4c1d95"/><path d="M47.1,24.2L50.0,6.0L52.9,24.2Z" fill="#c9a227"/><path d="M56.5,24.9L63.8,14.7L61.8,27.1Z" fill="#4c1d95"/><path d="M64.8,29.1L79.7,18.3L68.9,33.2Z" fill="#c9a227"/><path d="M70.9,36.2L83.3,34.2L73.1,41.5Z" fill="#4c1d95"/>
+      <circle cx="50" cy="48" r="22" fill="#c9a227" stroke="#4c1d95" stroke-width="2.4"/><circle cx="50" cy="48" r="14" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/></g>
+  <path d="M18 250h164l-8 15 8 15H18l8-15z" fill="#4c1d95"/>
+  <text x="100" y="270" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing="1.2">THE SUN</text>
+  <text x="100" y="300" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="8" font-weight="700" fill="#4c1d95" letter-spacing="2" opacity=".75">MAJOR ARCANA</text>
+</svg>

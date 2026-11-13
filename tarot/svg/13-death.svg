@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320" class="tarot-card">
+  <defs>
+    <radialGradient id="bgt14" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#fffdf8"/><stop offset="1" stop-color="#fbf7ee"/></radialGradient>
+    <pattern id="ptt14" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r=".8" fill="#4c1d95" opacity=".10"/></pattern>
+  </defs>
+  <rect x="2" y="2" width="196" height="316" rx="14" fill="url(#bgt14)" stroke="#4c1d95" stroke-width="4"/>
+  <rect x="11" y="11" width="178" height="298" rx="8" fill="none" stroke="#c9a227" stroke-width="1.4"/>
+  <rect x="15" y="15" width="170" height="290" rx="6" fill="none" stroke="#c9a227" stroke-width=".6"/>
+  <path d="M24 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M24 291l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 291l5 5-5 5-5-5z" fill="#c9a227"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="#ede9fe"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="url(#ptt14)"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="none" stroke="#4c1d95" stroke-width="1.2" opacity=".35"/>
+  <circle cx="100" cy="36" r="17" fill="#4c1d95"/><circle cx="100" cy="36" r="14" fill="none" stroke="#c9a227" stroke-width="1"/>
+  <text x="100" y="40" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="11" font-weight="700" fill="#fff" letter-spacing=".5">XIII</text>
+  <g transform="translate(35 81) scale(1.3)"><circle cx="50.0" cy="31.0" r="13" fill="#fff" stroke="#4c1d95" stroke-width="2.4"/><circle cx="64.3" cy="41.4" r="13" fill="#fff" stroke="#4c1d95" stroke-width="2.4"/><circle cx="58.8" cy="58.1" r="13" fill="#fff" stroke="#4c1d95" stroke-width="2.4"/><circle cx="41.2" cy="58.1" r="13" fill="#fff" stroke="#4c1d95" stroke-width="2.4"/><circle cx="35.7" cy="41.4" r="13" fill="#fff" stroke="#4c1d95" stroke-width="2.4"/>
+      <circle cx="50" cy="46" r="9" fill="#c9a227" stroke="#4c1d95" stroke-width="2"/>
+      <path d="M50 72v18M50 82c-6-2-10 0-12 4M50 80c6-2 10 0 12 4" fill="none" stroke="#65a30d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <path d="M18 250h164l-8 15 8 15H18l8-15z" fill="#4c1d95"/>
+  <text x="100" y="270" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing="1.2">DEATH</text>
+  <text x="100" y="300" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="8" font-weight="700" fill="#4c1d95" letter-spacing="2" opacity=".75">MAJOR ARCANA</text>
+</svg>

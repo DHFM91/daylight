@@ -87,7 +87,7 @@
   .grid.first .card { animation: rise .5s ease both; }
   @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   .span-4 { grid-column: span 4; } .span-5 { grid-column: span 5; } .span-7 { grid-column: span 7; } .span-8 { grid-column: span 8; } .span-6 { grid-column: span 6; } .span-12 { grid-column: span 12; }
-  @media (max-width: 980px) { .span-4, .span-5, .span-7, .span-8 { grid-column: span 6; } }
+  @media (max-width: 980px) { .span-4, .span-5, .span-7, .span-8 { grid-column: span 6; } .card[data-id=almanac], .card[data-id=horoscope] { grid-column: span 12; } }
   @media (max-width: 680px) { .grid > .card { grid-column: span 12; } .wrap { padding: 20px 14px 32px; } }
   .card h2 {
     margin: 0 0 14px; font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint);
@@ -153,7 +153,7 @@
   .bar span { display: block; height: 100%; border-radius: 7px; }
 
   /* ---------- sun ---------- */
-  .sun-svg { width: 100%; height: 150px; display: block; overflow: visible; }
+  .sun-svg { width: 100%; height: 132px; display: block; overflow: visible; }
   .sun-times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
   .golden { margin-top: 12px; font-size: .86rem; color: var(--ink-soft); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 
@@ -197,16 +197,18 @@
   @media (max-width: 480px) { .pollutants { grid-template-columns: repeat(2, 1fr); } }
   .report-pre { width: 100%; height: 46vh; overflow: auto; margin: 0; padding: 12px; border-radius: 12px; background: rgba(0,0,0,.05); font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
   body.dark .report-pre { background: rgba(255,255,255,.06); }
-  .sky-wrap { display: grid; grid-template-columns: minmax(240px, 380px) 1fr; gap: 26px; align-items: start; }
+  .sky-wrap { display: grid; grid-template-columns: minmax(220px, 250px) 1fr; gap: 22px; align-items: start; }
+  .const-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); column-gap: 18px; }
+  .const-grid .const-row { border-top: 0; border-bottom: 1px solid var(--line); }
   @media (max-width: 760px) { .sky-wrap { grid-template-columns: 1fr; } }
   .sky-svg { width: 100%; height: auto; display: block; }
   .sky-when { font-weight: 600; margin-bottom: 10px; }
-  .const-row { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+  .const-row { display: grid; grid-template-columns: 24px 1fr; gap: 9px; padding: 9px 0; border-top: 1px solid var(--line); }
   .const-row:first-of-type { border-top: 0; }
   .const-row .num { width: 24px; height: 24px; border-radius: 50%; background: #312e81; color: #fde68a; font-size: .75rem; font-weight: 700; display: grid; place-items: center; }
   .const-row b { font-weight: 700; }
   .const-row .where { color: var(--ink-soft); font-size: .9rem; }
-  .const-row .tip { color: var(--ink-faint); font-size: .84rem; margin-top: 2px; }
+  .const-row .tip { color: var(--ink-faint); font-size: .8rem; margin-top: 1px; line-height: 1.35; }
   .season { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
   .season-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: .9rem; }
   .season-next { margin-left: auto; color: var(--ink-soft); }
@@ -217,9 +219,9 @@
   body.dark .tide-arrow { color: #7dd3fc; }
   .tide-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; font-size: .88rem; padding: 5px 0; border-top: 1px solid var(--line); }
   .alm-quote { font-style: italic; font-size: .95rem; line-height: 1.45; padding: 4px 0 12px; }
-  .alm-row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .9rem; }
+  .alm-row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); font-size: .9rem; }
   .alm-row .k { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); padding-top: 3px; }
-  .horo-wrap { display: grid; grid-template-columns: minmax(190px, 270px) 1fr; gap: 18px; align-items: center; }
+  .horo-wrap { display: grid; grid-template-columns: minmax(190px, 240px) 1fr; gap: 18px; align-items: center; }
   @media (max-width: 520px) { .horo-wrap { grid-template-columns: 1fr; } .horo-wheel { max-width: 260px; margin: 0 auto; } }
   .horo-wheel { width: 100%; height: auto; display: block; }
   .pl-row { display: grid; grid-template-columns: 22px 70px 1fr; font-size: .86rem; padding: 2px 0; }
@@ -231,10 +233,25 @@
   .trow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
   @media (max-width: 680px) { .trow { grid-template-columns: repeat(3, 1fr); } }
   .tslot { margin: 0; text-align: center; }
-  .tcard { width: 100%; max-width: 130px; height: auto; display: block; margin: 0 auto 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.12)); }
+  .tcard { width: 100%; max-width: 150px; height: auto; display: block; margin: 0 auto 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.12)); }
   .tcard.rev { transform: rotate(180deg); }
   .tslot figcaption { display: flex; flex-direction: column; gap: 2px; font-size: .84rem; line-height: 1.3; }
   .tpos { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .rising { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: .84rem; color: var(--ink-soft); }
+  .rising .k { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .horo-text.cols { columns: 2; column-gap: 22px; }
+  .horo-text.cols p { break-inside: avoid; }
+  @media (max-width: 980px) { .horo-text.cols { columns: 1; } }
+  .aqi-strip { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; align-items: end; height: 34px; margin-top: 6px; }
+  .aqi-strip span { border-radius: 2px; min-height: 3px; }
+  .moon-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 14px; text-align: center; font-size: .7rem; font-weight: 700; color: var(--ink-faint); }
+  .mw-ic .moon-svg { width: 100%; max-width: 30px; height: auto; filter: none; margin: 0 auto 2px; display: block; }
+  .camps { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .camps-h { font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+  .camps-h span { text-transform: none; letter-spacing: 0; font-weight: 500; }
+  .camp { display: flex; flex-direction: column; padding: 5px 8px; margin: 0 -8px; border-radius: 10px; color: inherit; text-decoration: none; font-size: .88rem; line-height: 1.3; }
+  .camp b, .camp span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .camp:hover { background: rgba(245,158,11,.12); }
   footer { margin-top: 28px; text-align: center; font-size: .78rem; color: var(--ink-faint); }
   footer a { color: inherit; }
   .error { color: #b91c1c; font-size: .9rem; }
@@ -277,7 +294,7 @@
   <main class="grid" id="grid"></main>
 
   <footer>
-    Weather &amp; air quality data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0) &middot; Tides by <a href="https://tidesandcurrents.noaa.gov/" target="_blank" rel="noopener">NOAA</a> &middot; Sun &amp; moon calculated in your browser
+    Weather &amp; air quality data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0) &middot; Tides by <a href="https://tidesandcurrents.noaa.gov/" target="_blank" rel="noopener">NOAA</a> &middot; Campsites &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &middot; Sun &amp; moon calculated in your browser
   </footer>
 </div>
 
@@ -324,6 +341,7 @@
   </div>
 </div>
 
+<script src="tarot-cards.js"></script>
 <script>
 (() => {
   "use strict";
@@ -347,8 +365,8 @@
     { id: "moon",   title: "Moon",            span: "span-6" },
     { id: "tides",  title: "Tides",           span: "span-6" },
     { id: "sky",    title: "Night sky",       span: "span-12" },
-    { id: "almanac", title: "Almanac",        span: "span-5" },
-    { id: "horoscope", title: "Sky horoscope", span: "span-7" },
+    { id: "almanac", title: "Almanac",        span: "span-4" },
+    { id: "horoscope", title: "Sky horoscope", span: "span-8" },
     { id: "tarot",  title: "Daily tarot",     span: "span-12" }
   ];
 
@@ -365,6 +383,7 @@
     aq: store.get("aq", null),     // cached air response
     fetchedAt: store.get("fetchedAt", 0),
     tide: store.get("tide", null),
+    camps: store.get("camps", null),
     error: null
   };
   // make sure any newly added widget ids appear in the order list
@@ -565,14 +584,14 @@
   }
   async function refresh(force) {
     const p = state.place;
-    if (!force && state.wx && state.wx._key === key(p) && Date.now() - state.fetchedAt < 10 * 60e3) { renderAll(); loadTides().then(renderAll); return; }
+    if (!force && state.wx && state.wx._key === key(p) && Date.now() - state.fetchedAt < 10 * 60e3) { renderAll(); loadTides().then(renderAll); loadCamps().then(renderAll); return; }
     const wxURL = `https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&timezone=auto&forecast_days=7` +
       `&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
       `&hourly=temperature_2m,precipitation_probability,weather_code,is_day,uv_index` +
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,uv_index_max`;
     const aqURL = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${p.lat}&longitude=${p.lon}&timezone=auto` +
       `&current=us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen` +
-      `&hourly=us_aqi&forecast_days=1`;
+      `&hourly=us_aqi&forecast_days=2`;
     $("#updated").textContent = "Updating…";
     const [wx, aq] = await Promise.allSettled([getJSON(wxURL), getJSON(aqURL)]);
     state.error = null;
@@ -585,6 +604,7 @@
     if (wx.status === "fulfilled") { state.fetchedAt = Date.now(); store.set("fetchedAt", state.fetchedAt); }
     renderAll();
     loadTides().then(renderAll);
+    loadCamps().then(renderAll);
   }
   const key = p => `${(+p.lat).toFixed(3)},${(+p.lon).toFixed(3)}`;
   const wxReady = () => state.wx && state.wx._key === key(state.place);
@@ -739,6 +759,15 @@
     [300, "Very unhealthy", "#a855f7", "Health alert. Limit outdoor activity."],
     [9999, "Hazardous", "#7f1d1d", "Emergency conditions. Stay indoors if you can."]
   ];
+  function aqiStrip() {
+    const h = state.aq.hourly; if (!h || !h.us_aqi || !state.wx) return "";
+    const nowKey = state.wx.current.time.slice(0, 13) + ":00"; let i0 = h.time.indexOf(nowKey); if (i0 < 0) i0 = 0;
+    const vals = h.us_aqi.slice(i0, i0 + 24); if (vals.filter(v => v != null).length < 6) return "";
+    const max = Math.max(60, ...vals.filter(v => v != null));
+    const worst = Math.max(...vals.filter(v => v != null)), wb = AQI_BANDS.find(b => worst <= b[0]);
+    return `<div class="pollen"><h2 style="margin-bottom:2px">Next 24 hours <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--ink-soft)">· peaks at ${Math.round(worst)} (${esc(wb[1].toLowerCase())})</span></h2>
+      <div class="aqi-strip">${vals.map(v => v == null ? "<span></span>" : `<span title="${Math.round(v)}" style="height:${Math.max(10, v / max * 100)}%;background:${AQI_BANDS.find(b => v <= b[0])[2]}"></span>`).join("")}</div></div>`;
+  }
   function wAir() {
     if (!aqReady()) return waiting();
     const c = state.aq.current, aqi = c.us_aqi;
@@ -768,6 +797,7 @@
       <div class="pollutants">
         ${pol("PM2.5", c.pm2_5, "µg/m³")}${pol("PM10", c.pm10, "µg/m³")}${pol("Ozone", c.ozone, "µg/m³")}${pol("NO₂", c.nitrogen_dioxide, "µg/m³")}
       </div>
+      ${aqiStrip()}
       <div class="pollen"><h2 style="margin-bottom:8px">Pollen</h2>${pollen}</div>`;
   }
 
@@ -816,7 +846,7 @@
     const len = t.sunset - t.sunrise, lenY = ty.sunset && ty.sunrise ? ty.sunset - ty.sunrise : null;
     const diff = lenY == null ? null : Math.round((len - lenY) / 1000);
     // arc: x = fraction of day from sunrise to sunset
-    const W = innerWidth < 680 || state.trio ? 340 : 600, Hs = 150, base = 118, peak = 22, L = 34, R = W - 34;
+    const W = innerWidth < 680 || state.trio ? 340 : 600, Hs = 132, base = 104, peak = 18, L = 34, R = W - 34;
     const frac = (now - t.sunrise) / len;
     const arcY = f => base - (base - peak) * Math.sin(Math.PI * f);
     let arcPath = ""; for (let i = 0; i <= 60; i++) { const f = i / 60; arcPath += (i ? " L" : "M") + (L + (R - L) * f).toFixed(1) + "," + arcY(f).toFixed(1); }
@@ -871,6 +901,15 @@
       <g fill="#000" opacity=".07"><circle cx="40" cy="44" r="8"/><circle cx="66" cy="70" r="11"/><circle cx="70" cy="38" r="5"/><circle cx="44" cy="76" r="4"/></g>
     </svg>`;
   }
+  function moonWeek(p) {
+    const now = new Date(), zone = tz(); let cells = "";
+    for (let i = 1; i <= 7; i++) {
+      const d = new Date(zoneDayInstant(now, zone, 21, i)), m = astro.moonIllumination(d);
+      const day = new Intl.DateTimeFormat(undefined, { weekday: "narrow", timeZone: zone }).format(d);
+      cells += `<div class="mw"><div class="mw-ic">${moonSVG(m.phase, m.fraction, p.lat < 0)}</div><span>${esc(day)}</span></div>`;
+    }
+    return `<div class="moon-week">${cells}</div>`;
+  }
   function wMoon() {
     const p = state.place, now = new Date(), zone = tz();
     const m = astro.moonIllumination(now);
@@ -890,6 +929,7 @@
           <div class="moon-sub muted tiny" style="margin-top:6px">${Math.round(m.dist).toLocaleString()} km away</div>
         </div>
       </div>
+      ${moonWeek(p)}
       <div class="moon-grid">
         <div class="stat"><div class="k">Moonrise</div><div class="v">${esc(mt.rise ? fmtTime(mt.rise) : "None today")}</div></div>
         <div class="stat"><div class="k">Moonset</div><div class="v">${esc(mt.set ? fmtTime(mt.set) : "None today")}</div></div>
@@ -948,11 +988,11 @@
   const stationLabel = st => st.state && !/,\s*[A-Z.]{2,5}$/.test(st.name) ? `${st.name}, ${st.state}` : st.name;
   function wTides() {
     const td = state.tide, ev = td.events, now = Date.now();
-    const upcoming = ev.filter(e => e.t > now).slice(0, 4);
+    const upcoming = ev.filter(e => e.t > now).slice(0, 5);
     if (!upcoming.length) return `<div class="skeleton">No upcoming tide predictions.</div>`;
     const next = upcoming[0], level = tideLevel(ev, now), rising = next.type === "H";
     // chart: 6h back to 24h ahead
-    const W = 360, H = 96, t0 = now - 6 * 36e5, t1 = now + 24 * 36e5;
+    const W = 360, H = 128, t0 = now - 6 * 36e5, t1 = now + 24 * 36e5;
     const win = ev.filter(e => e.t >= t0 - 8 * 36e5 && e.t <= t1 + 8 * 36e5);
     const lo = Math.min(...win.map(e => e.ft)), hi = Math.max(...win.map(e => e.ft)), span = Math.max(hi - lo, 0.5);
     const X = t => 6 + (W - 12) * (t - t0) / (t1 - t0), Yv = v => 14 + (H - 30) * (1 - (v - lo) / span);
@@ -973,6 +1013,59 @@
         <div class="tiny muted">${rising ? "Rising" : "Falling"}${level != null ? ", now " + ftOrM(level) : ""} · ${ftOrM(next.ft)} at ${next.type === "H" ? "high" : "low"}</div></div></div>
       ${chart}${rows}
       <div class="tiny muted" style="margin-top:8px">${esc(stationLabel(st))} · ${Math.round(st.km)} km away · NOAA</div>`;
+  }
+
+  /* ---------- stargazing campsites (OpenStreetMap, no key) ---------- */
+  const campsReady = () => state.camps && state.camps._key === key(state.place);
+  async function loadCamps() {
+    const p = state.place, k = key(p);
+    if (state.camps && state.camps._key === k && Date.now() - state.camps.at < 14 * 864e5) return;
+    if (loadCamps.busy === k) return; loadCamps.busy = k;
+    const q = `[out:json][timeout:40];(node["tourism"="camp_site"]["name"](around:100000,${p.lat},${p.lon});way["tourism"="camp_site"]["name"](around:100000,${p.lat},${p.lon}););out center tags 300;`;
+    try {
+      const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 60000);
+      const r = await fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q), { signal: ctrl.signal }); clearTimeout(timer);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      const skip = /scout|ymca|4-h|bible|church|youth|christian|retreat center|girl|boy/i;
+      const list = j.elements.map(e => ({ t: e.tags, lat: e.lat ?? e.center?.lat, lon: e.lon ?? e.center?.lon }))
+        .filter(c => c.lat != null && !skip.test(c.t.name) && c.t.access !== "private" && c.t.access !== "no" && c.t.group_only !== "yes")
+        .map(c => {
+          const km = kmBetween(p.lat, p.lon, c.lat, c.lon), t = c.t, txt = `${t.name} ${t.operator || ""}`;
+          // darker the farther from the city; parks, forests, backcountry and height help too
+          let score = km < 15 ? 0 : km < 35 ? 1 : km < 60 ? 2 : 3;
+          if (/state park|national|forest|wilderness|mountain|preserve|reservation/i.test(txt)) score += 1;
+          if (/dark sky|observatory|astronom/i.test(JSON.stringify(t))) score += 3;
+          if (t.backcountry === "yes") score += 0.5;
+          if (+t.ele > 400) score += 0.5;
+          if (t.toilets === "yes" || t.drinking_water === "yes") score += 0.3;
+          if (t.website || t["contact:website"]) score += 0.2;
+          const bits = [];
+          if (/state park|national|forest/i.test(t.operator || "")) bits.push(t.operator);
+          if (t.backcountry === "yes") bits.push("backcountry");
+          if (t.tents === "yes") bits.push("tents");
+          if (t.caravans === "yes" || t.motorhome === "yes") bits.push("RVs");
+          if (t.fee === "no") bits.push("free");
+          return { name: t.name, lat: c.lat, lon: c.lon, km, score, bits: bits.slice(0, 3), az: (Math.atan2(Math.sin((c.lon - p.lon) * Math.PI / 180) * Math.cos(c.lat * Math.PI / 180), Math.cos(p.lat * Math.PI / 180) * Math.sin(c.lat * Math.PI / 180) - Math.sin(p.lat * Math.PI / 180) * Math.cos(c.lat * Math.PI / 180) * Math.cos((c.lon - p.lon) * Math.PI / 180)) * 180 / Math.PI + 360) % 360 };
+        })
+        .sort((a, b) => b.score - a.score || a.km - b.km);
+      // one per park/area: drop near-duplicates within 3 km of a better pick
+      const picked = [];
+      for (const c of list) { if (picked.every(x => kmBetween(x.lat, x.lon, c.lat, c.lon) > 3)) picked.push(c); if (picked.length >= 8) break; }
+      state.camps = { _key: k, at: Date.now(), list: picked };
+      store.set("camps", state.camps);
+    } catch (err) { console.warn("Campsites unavailable", err); }
+    finally { loadCamps.busy = null; }
+  }
+  function campsHTML(n) {
+    if (!campsReady()) return `<div class="camps"><div class="camps-h">Stargazing campsites</div><div class="tiny muted">Looking for campsites away from city lights…</div></div>`;
+    const list = state.camps.list.slice(0, n);
+    if (!list.length) return `<div class="camps"><div class="camps-h">Stargazing campsites</div><div class="tiny muted">No public campsites found within 100 km.</div></div>`;
+    const dist = km => state.units === "f" ? `${Math.round(km / 1.609)} mi` : `${Math.round(km)} km`;
+    return `<div class="camps"><div class="camps-h">Stargazing campsites <span>darkest picks nearby</span></div>
+      ${list.map(c => `<a class="camp" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.name + " " + c.lat.toFixed(4) + "," + c.lon.toFixed(4))}" target="_blank" rel="noopener">
+        <b>${esc(c.name)}</b><span class="tiny muted">${dist(c.km)} ${esc(compass(c.az))}${c.bits.length ? " · " + esc(c.bits.join(" · ")) : ""}</span></a>`).join("")}
+      <div class="tiny muted" style="margin-top:4px">From OpenStreetMap · tap a site for Google reviews and directions</div></div>`;
   }
   /* ---------- night sky ---------- */
   // Anchor = the constellation's easiest-to-find bright star or shape (RA hours, Dec degrees)
@@ -1015,7 +1108,7 @@
     const p = state.place, { when, isNow } = skyViewTime();
     const dark = astro.sunPosition(when, p.lat, p.lon).altitude <= -6;
     const vis = CONSTELLATIONS.map(c => ({ ...c, ...astro.starPosition(c.ra, c.dec, when, p.lat, p.lon) }))
-      .filter(c => c.altitude > 12).sort((a, b) => b.altitude - a.altitude).slice(0, 8);
+      .filter(c => c.altitude > 12).sort((a, b) => b.altitude - a.altitude).slice(0, 10);
     // constellations not shown yet that climb into view before dawn
     const shown = new Set(vis.map(c => c.name)), rising = [], step = 10 * 60e3;
     if (dark) {
@@ -1039,8 +1132,7 @@
   const risingLine = c => c.riseAt
     ? `${c.name} rises in the ${dir16(c.riseAz)} around ${fmtTime(c.riseAt)} and is easy to see by ${fmtTime(c.goodAt)}.`
     : `${c.name} climbs into good view in the ${dir16(c.riseAz)} around ${fmtTime(c.goodAt)}.`;
-  const risingHTML = list => !list.length ? "" : `<div class="pollen" style="margin-top:14px"><h2 style="margin-bottom:8px">Rising later tonight</h2>
-      ${list.map(c => `<div class="where" style="padding:3px 0">${esc(risingLine(c))}</div>`).join("")}</div>`;
+  const risingHTML = list => !list.length ? "" : `<div class="rising"><span class="k">Rising later</span>${list.map(c => `<span>${esc(c.name.replace(/ \(.*\)$/, ""))} <b>${esc(fmtTime(c.goodAt))}</b></span>`).join("")}</div>`;
   function wSky() {
     const { when, isNow, dark, vis, rising, moon, mIll } = skyData();
     if (!dark) {
@@ -1072,8 +1164,8 @@
         <div class="where">Look ${dir16(c.azimuth)}, ${heightWord(c.altitude)} (${Math.round(c.altitude)}°)</div>
         <div class="tip">${esc(c.tip)}</div></div></div>`).join("") : `<div class="skeleton">None of the major constellations are well placed right then.</div>`;
     return `<div class="sky-wrap">
-        <div>${map}<div class="tiny muted" style="text-align:center;margin-top:6px">Hold it overhead: north at the top, east on the left. The centre is straight up.</div></div>
-        <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div>${list}${moonNote}${risingHTML(rising)}</div>
+        <div>${map}<div class="tiny muted" style="text-align:center;margin-top:4px">Hold overhead: north up, east left, centre straight up.</div>${campsHTML(3)}</div>
+        <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div><div class="const-grid">${list}</div>${moonNote}${risingHTML(rising)}</div>
       </div>`;
   }
   /* =========================================================
@@ -1130,86 +1222,7 @@
     return { longitude, sunLongitude, moonLongitude };
   })();
 
-  const TAROT = [
-  { name: "The Fool", arcana: "major", num: "0", suit: null, up: "new beginnings, spontaneity, a leap of faith", rev: "recklessness, hesitation, a false start", phrase: "a fresh start that asks you to trust the leap" },
-  { name: "The Magician", arcana: "major", num: "I", suit: null, up: "willpower, skill, resourcefulness", rev: "scattered focus, untapped potential, poor planning", phrase: "the power to turn your ideas into something real" },
-  { name: "The High Priestess", arcana: "major", num: "II", suit: null, up: "intuition, inner knowing, quiet mystery", rev: "ignored instincts, secrets, disconnection from yourself", phrase: "a quiet invitation to listen to your inner voice" },
-  { name: "The Empress", arcana: "major", num: "III", suit: null, up: "nurturing, abundance, creativity", rev: "overgiving, creative block, neglecting yourself", phrase: "the abundance that grows when you nurture what you love" },
-  { name: "The Emperor", arcana: "major", num: "IV", suit: null, up: "structure, authority, stability", rev: "rigidity, control issues, a lack of discipline", phrase: "the steady structure that gives your goals a firm foundation" },
-  { name: "The Hierophant", arcana: "major", num: "V", suit: null, up: "tradition, guidance, shared values", rev: "nonconformity, questioning rules, personal beliefs", phrase: "the wisdom found in tradition and trusted teachers" },
-  { name: "The Lovers", arcana: "major", num: "VI", suit: null, up: "love, harmony, aligned choices", rev: "disharmony, misalignment, a difficult decision", phrase: "a heartfelt choice that reflects what you truly value" },
-  { name: "The Chariot", arcana: "major", num: "VII", suit: null, up: "determination, momentum, victory", rev: "lack of direction, scattered energy, loss of control", phrase: "focused determination that carries you steadily toward your goal" },
-  { name: "Strength", arcana: "major", num: "VIII", suit: null, up: "courage, patience, gentle resilience", rev: "self-doubt, low confidence, raw emotion", phrase: "the quiet courage of meeting challenges with patience and compassion" },
-  { name: "The Hermit", arcana: "major", num: "IX", suit: null, up: "solitude, reflection, inner guidance", rev: "isolation, withdrawal, resisting reflection", phrase: "a pause for solitude and looking inward for answers" },
-  { name: "Wheel of Fortune", arcana: "major", num: "X", suit: null, up: "cycles, change, good timing", rev: "resistance to change, setbacks, bad timing", phrase: "the turning of cycles and the change that comes with them" },
-  { name: "Justice", arcana: "major", num: "XI", suit: null, up: "fairness, truth, accountability", rev: "bias, dishonesty, avoiding responsibility", phrase: "fairness and honesty guiding the choices you make now" },
-  { name: "The Hanged Man", arcana: "major", num: "XII", suit: null, up: "surrender, new perspective, pause", rev: "stalling, resistance, needless sacrifice", phrase: "a pause that lets you see things from a new angle" },
-  { name: "Death", arcana: "major", num: "XIII", suit: null, up: "endings, transformation, release", rev: "resisting change, clinging to the past, slow transition", phrase: "a meaningful ending that makes room for transformation and renewal" },
-  { name: "Temperance", arcana: "major", num: "XIV", suit: null, up: "balance, moderation, patience", rev: "imbalance, excess, impatience", phrase: "a gentle balance found through patience and moderation" },
-  { name: "The Devil", arcana: "major", num: "XV", suit: null, up: "attachment, temptation, shadow side", rev: "release, breaking free, reclaiming your power", phrase: "noticing the habits that bind you and choosing freedom" },
-  { name: "The Tower", arcana: "major", num: "XVI", suit: null, up: "sudden change, upheaval, revelation", rev: "avoiding change, fear of disruption, slow rebuilding", phrase: "an unexpected shake-up that clears away what was unstable" },
-  { name: "The Star", arcana: "major", num: "XVII", suit: null, up: "hope, healing, inspiration", rev: "discouragement, lost faith, disconnection", phrase: "renewed hope and a calm sense of healing" },
-  { name: "The Moon", arcana: "major", num: "XVIII", suit: null, up: "intuition, dreams, uncertainty", rev: "clarity emerging, released fear, confusion lifting", phrase: "a time of dreams and uncertainty where intuition lights the way" },
-  { name: "The Sun", arcana: "major", num: "XIX", suit: null, up: "joy, vitality, success", rev: "dimmed enthusiasm, temporary clouds, delayed happiness", phrase: "warmth, joy, and a bright sense of confidence" },
-  { name: "Judgement", arcana: "major", num: "XX", suit: null, up: "reflection, awakening, a calling", rev: "self-doubt, avoiding the call, harsh self-criticism", phrase: "an awakening that invites you to answer a deeper calling" },
-  { name: "The World", arcana: "major", num: "XXI", suit: null, up: "completion, fulfillment, wholeness", rev: "loose ends, delays, almost finished", phrase: "the satisfying completion of a cycle and a sense of wholeness" },
-  { name: "Ace of Wands", arcana: "minor", num: "A", suit: "wands", up: "inspiration, new energy, creative spark", rev: "delays, lack of motivation, a dim spark", phrase: "a spark of inspiration ready to be turned into action" },
-  { name: "Two of Wands", arcana: "minor", num: "2", suit: "wands", up: "planning, vision, future goals", rev: "indecision, fear of the unknown, playing it small", phrase: "planning ahead and weighing the bigger vision for your future" },
-  { name: "Three of Wands", arcana: "minor", num: "3", suit: "wands", up: "expansion, foresight, progress", rev: "delays, obstacles, waiting longer than hoped", phrase: "growth on the horizon as your earlier efforts begin to pay off" },
-  { name: "Four of Wands", arcana: "minor", num: "4", suit: "wands", up: "celebration, community, homecoming", rev: "instability, tension at home, uncertain belonging", phrase: "a joyful celebration with the people who make you feel at home" },
-  { name: "Five of Wands", arcana: "minor", num: "5", suit: "wands", up: "competition, friction, differing opinions", rev: "resolving conflict, avoiding tension, finding common ground", phrase: "friendly competition and the lively clash of differing ideas" },
-  { name: "Six of Wands", arcana: "minor", num: "6", suit: "wands", up: "victory, recognition, confidence", rev: "self-doubt, delayed recognition, pride", phrase: "well-earned recognition and the confidence that follows a success" },
-  { name: "Seven of Wands", arcana: "minor", num: "7", suit: "wands", up: "defending your position, perseverance, conviction", rev: "exhaustion, giving way, feeling overwhelmed", phrase: "standing your ground and staying true to your convictions" },
-  { name: "Eight of Wands", arcana: "minor", num: "8", suit: "wands", up: "speed, swift progress, news arriving", rev: "delays, frustration, scattered momentum", phrase: "swift movement and quick progress as things fall into place" },
-  { name: "Nine of Wands", arcana: "minor", num: "9", suit: "wands", up: "resilience, persistence, last stretch", rev: "fatigue, defensiveness, near burnout", phrase: "the resilience to keep going through the final stretch" },
-  { name: "Ten of Wands", arcana: "minor", num: "10", suit: "wands", up: "heavy responsibility, hard work, commitment", rev: "letting go, delegating, setting burdens down", phrase: "a heavy load that invites you to share the weight" },
-  { name: "Page of Wands", arcana: "minor", num: "P", suit: "wands", up: "curiosity, enthusiasm, new ideas", rev: "restlessness, hesitation, unfinished plans", phrase: "curious enthusiasm for a bold new idea worth exploring" },
-  { name: "Knight of Wands", arcana: "minor", num: "Kn", suit: "wands", up: "energy, adventure, passion", rev: "impulsiveness, impatience, scattered drive", phrase: "bold, adventurous energy that pushes you into motion" },
-  { name: "Queen of Wands", arcana: "minor", num: "Q", suit: "wands", up: "confidence, warmth, determination", rev: "insecurity, withdrawal, wavering spirit", phrase: "warm confidence that draws others toward your passion" },
-  { name: "King of Wands", arcana: "minor", num: "K", suit: "wands", up: "leadership, vision, bold action", rev: "overbearing, impatience, unrealistic expectations", phrase: "visionary leadership that turns a big idea into reality" },
-  { name: "Ace of Cups", arcana: "minor", num: "A", suit: "cups", up: "new love, emotional openness, compassion", rev: "emotional blockage, guarded feelings, held-back love", phrase: "an open heart and the start of something emotionally rich" },
-  { name: "Two of Cups", arcana: "minor", num: "2", suit: "cups", up: "partnership, mutual attraction, connection", rev: "imbalance, miscommunication, drifting apart", phrase: "a balanced partnership built on mutual respect and affection" },
-  { name: "Three of Cups", arcana: "minor", num: "3", suit: "cups", up: "friendship, celebration, community", rev: "overindulgence, gossip, feeling left out", phrase: "joyful friendship and the pleasure of celebrating together" },
-  { name: "Four of Cups", arcana: "minor", num: "4", suit: "cups", up: "contemplation, apathy, reevaluation", rev: "renewed interest, awareness, accepting an offer", phrase: "a thoughtful pause to reconsider what you really want" },
-  { name: "Five of Cups", arcana: "minor", num: "5", suit: "cups", up: "grief, regret, looking back", rev: "acceptance, moving on, finding hope again", phrase: "honest mourning of a loss and the hope that remains" },
-  { name: "Six of Cups", arcana: "minor", num: "6", suit: "cups", up: "nostalgia, childhood memories, kindness", rev: "stuck in the past, unrealistic memories, moving forward", phrase: "tender nostalgia and the simple kindness of old memories" },
-  { name: "Seven of Cups", arcana: "minor", num: "7", suit: "cups", up: "choices, imagination, wishful thinking", rev: "clarity, decisiveness, seeing through illusions", phrase: "a wide field of dreams and the need to choose wisely" },
-  { name: "Eight of Cups", arcana: "minor", num: "8", suit: "cups", up: "walking away, seeking meaning, moving on", rev: "fear of leaving, drifting, avoiding change", phrase: "the courage to walk away in search of deeper meaning" },
-  { name: "Nine of Cups", arcana: "minor", num: "9", suit: "cups", up: "contentment, satisfaction, wishes fulfilled", rev: "dissatisfaction, smugness, hollow pleasure", phrase: "quiet contentment and the satisfaction of a wish fulfilled" },
-  { name: "Ten of Cups", arcana: "minor", num: "10", suit: "cups", up: "family harmony, lasting happiness, emotional fulfillment", rev: "strained relationships, disconnection, unmet ideals", phrase: "lasting happiness shared with the people you love" },
-  { name: "Page of Cups", arcana: "minor", num: "P", suit: "cups", up: "sensitivity, creative inspiration, a sweet message", rev: "emotional immaturity, mood swings, creative block", phrase: "a gentle, imaginative message that stirs your creative heart" },
-  { name: "Knight of Cups", arcana: "minor", num: "Kn", suit: "cups", up: "romance, charm, following your heart", rev: "moodiness, unrealistic expectations, overidealizing", phrase: "a romantic offering and the call to follow your heart" },
-  { name: "Queen of Cups", arcana: "minor", num: "Q", suit: "cups", up: "compassion, emotional depth, intuition", rev: "emotional overwhelm, dependence, blurred boundaries", phrase: "compassionate emotional depth that offers comfort and understanding" },
-  { name: "King of Cups", arcana: "minor", num: "K", suit: "cups", up: "emotional balance, diplomacy, calm wisdom", rev: "mood swings, suppressed feelings, emotional distance", phrase: "calm emotional balance and the wisdom to lead with kindness" },
-  { name: "Ace of Swords", arcana: "minor", num: "A", suit: "swords", up: "clarity, truth, a breakthrough", rev: "confusion, clouded thinking, unclear ideas", phrase: "a breakthrough of clarity that cuts through the confusion" },
-  { name: "Two of Swords", arcana: "minor", num: "2", suit: "swords", up: "a difficult choice, stalemate, balance", rev: "indecision, information coming out, release of tension", phrase: "a pause at a crossroads where a hard choice awaits" },
-  { name: "Three of Swords", arcana: "minor", num: "3", suit: "swords", up: "heartache, sorrow, honest grief", rev: "healing, forgiveness, recovering from pain", phrase: "honest sorrow that must be felt before healing can begin" },
-  { name: "Four of Swords", arcana: "minor", num: "4", suit: "swords", up: "rest, recovery, quiet restoration", rev: "restlessness, burnout, returning to activity", phrase: "a much-needed rest that restores your mind and body" },
-  { name: "Five of Swords", arcana: "minor", num: "5", suit: "swords", up: "conflict, hollow victory, tension", rev: "reconciliation, regret, letting the conflict go", phrase: "a conflict that asks what winning is really worth" },
-  { name: "Six of Swords", arcana: "minor", num: "6", suit: "swords", up: "transition, moving on, calmer waters", rev: "resistance to moving on, unresolved baggage, delays", phrase: "a gentle passage toward calmer waters and a fresh start" },
-  { name: "Seven of Swords", arcana: "minor", num: "7", suit: "swords", up: "strategy, stealth, acting alone", rev: "coming clean, conscience, being found out", phrase: "a careful strategy and the question of honest dealing" },
-  { name: "Eight of Swords", arcana: "minor", num: "8", suit: "swords", up: "feeling trapped, self-imposed limits, restriction", rev: "release, new perspective, freeing yourself", phrase: "limits that feel real but may be loosened by a fresh view" },
-  { name: "Nine of Swords", arcana: "minor", num: "9", suit: "swords", up: "anxiety, worry, sleepless nights", rev: "relief, hope returning, facing your fears", phrase: "heavy worries that grow lighter once you speak them aloud" },
-  { name: "Ten of Swords", arcana: "minor", num: "10", suit: "swords", up: "a painful ending, release, hitting bottom", rev: "recovery, slow healing, learning from the past", phrase: "a painful ending that finally clears the way for renewal" },
-  { name: "Page of Swords", arcana: "minor", num: "P", suit: "swords", up: "curiosity, sharp thinking, new ideas", rev: "hasty words, scattered thoughts, gossip", phrase: "sharp curiosity and a hunger to learn something new" },
-  { name: "Knight of Swords", arcana: "minor", num: "Kn", suit: "swords", up: "ambition, quick action, directness", rev: "impulsiveness, bluntness, rushing ahead", phrase: "fast-moving ambition that needs a steady and thoughtful aim" },
-  { name: "Queen of Swords", arcana: "minor", num: "Q", suit: "swords", up: "clear thinking, honesty, independence", rev: "coldness, guardedness, overly harsh judgment", phrase: "clear-eyed honesty delivered with independence and a sharp mind" },
-  { name: "King of Swords", arcana: "minor", num: "K", suit: "swords", up: "intellect, fairness, reasoned authority", rev: "rigid thinking, detachment, misuse of authority", phrase: "fair, reasoned judgment grounded in knowledge and integrity" },
-  { name: "Ace of Pentacles", arcana: "minor", num: "A", suit: "pentacles", up: "new opportunity, prosperity, a solid start", rev: "missed chance, poor planning, shaky footing", phrase: "a promising opportunity with solid ground beneath it" },
-  { name: "Two of Pentacles", arcana: "minor", num: "2", suit: "pentacles", up: "balancing priorities, adaptability, juggling tasks", rev: "overwhelm, disorganization, stretched too thin", phrase: "the graceful juggling of competing priorities with a flexible mind" },
-  { name: "Three of Pentacles", arcana: "minor", num: "3", suit: "pentacles", up: "teamwork, craftsmanship, collaboration", rev: "disharmony, poor teamwork, lack of effort", phrase: "teamwork and skilled craft that build something lasting together" },
-  { name: "Four of Pentacles", arcana: "minor", num: "4", suit: "pentacles", up: "security, saving, holding on", rev: "generosity, loosening your grip, overspending", phrase: "a careful grip on security and the question of when to loosen it" },
-  { name: "Five of Pentacles", arcana: "minor", num: "5", suit: "pentacles", up: "hardship, feeling left out, need for support", rev: "recovery, help arriving, improving circumstances", phrase: "a lean season that reminds you help is closer than it seems" },
-  { name: "Six of Pentacles", arcana: "minor", num: "6", suit: "pentacles", up: "generosity, sharing, fair exchange", rev: "strings attached, imbalance, uneven giving", phrase: "generosity and the fair, open-handed sharing of resources" },
-  { name: "Seven of Pentacles", arcana: "minor", num: "7", suit: "pentacles", up: "patience, long-term effort, assessing progress", rev: "impatience, doubts about results, poor returns", phrase: "patient tending of long-term effort while you wait for growth" },
-  { name: "Eight of Pentacles", arcana: "minor", num: "8", suit: "pentacles", up: "diligence, skill building, dedication", rev: "perfectionism, boredom, lack of focus", phrase: "steady dedication to learning and improving your craft" },
-  { name: "Nine of Pentacles", arcana: "minor", num: "9", suit: "pentacles", up: "self-reliance, comfort, earned rewards", rev: "overworking, dependence, insecure finances", phrase: "comfortable independence and the quiet reward of your own effort" },
-  { name: "Ten of Pentacles", arcana: "minor", num: "10", suit: "pentacles", up: "legacy, family security, lasting wealth", rev: "family friction, unstable foundations, financial worries", phrase: "a lasting legacy and the security of a well-built foundation" },
-  { name: "Page of Pentacles", arcana: "minor", num: "P", suit: "pentacles", up: "study, ambition, a practical new start", rev: "procrastination, lack of focus, unrealistic plans", phrase: "a practical new start and the eagerness to learn" },
-  { name: "Knight of Pentacles", arcana: "minor", num: "Kn", suit: "pentacles", up: "reliability, hard work, steady progress", rev: "stagnation, stubbornness, perfectionism", phrase: "dependable, steady effort that wins through patience and persistence" },
-  { name: "Queen of Pentacles", arcana: "minor", num: "Q", suit: "pentacles", up: "nurturing, practicality, abundance", rev: "self-neglect, overwork, imbalance at home", phrase: "practical care that makes a comfortable and abundant home" },
-  { name: "King of Pentacles", arcana: "minor", num: "K", suit: "pentacles", up: "prosperity, stability, generous leadership", rev: "greed, stubbornness, overemphasis on material things", phrase: "grounded prosperity and the steady leadership of a patient provider" }
-  ];
+  const TAROT = (window.TarotCards && TarotCards.deck) || [];
 
   /* =========================================================
      Almanac · Sky horoscope · Daily tarot
@@ -1275,7 +1288,15 @@
     const pool = [...LORE[z.month], ...LORE.any], lore = pool[Math.floor(rnd() * pool.length)];
     const start = Date.UTC(z.year, 0, 1), doy = Math.floor((Date.UTC(z.year, z.month - 1, z.day) - start) / 864e5) + 1;
     const len = (z.year % 4 === 0 && z.year % 100 !== 0) || z.year % 400 === 0 ? 366 : 365;
-    return { full, moonName, blue, shower, cq, lore, doy, len };
+    return { full, moonName, blue, shower, cq, lore, doy, len, waxing: astro.moonIllumination(now).phase < 0.5, birth: BIRTH[z.month - 1], zod: zodiacSeason(now) };
+  }
+  const BIRTH = [["garnet", "carnation"], ["amethyst", "violet"], ["aquamarine", "daffodil"], ["diamond", "daisy"], ["emerald", "lily of the valley"], ["pearl", "rose"],
+    ["ruby", "larkspur"], ["peridot", "gladiolus"], ["sapphire", "aster"], ["opal", "marigold"], ["topaz and citrine", "chrysanthemum"], ["turquoise", "narcissus"]];
+  function zodiacSeason(now) {
+    const lon = planets.sunLongitude(now), sign = Math.floor(lon / 30);
+    // step forward to the moment the Sun enters the next sign
+    let t = now.valueOf(); while (Math.floor(planets.sunLongitude(new Date(t)) / 30) === sign && t - now < 40 * 864e5) t += 6 * 36e5;
+    return { sign: SIGNS[sign], next: SIGNS[(sign + 1) % 12], at: new Date(t) };
   }
   function wAlmanac() {
     const a = almanacData(), zone = tz();
@@ -1287,6 +1308,9 @@
       ${row("Full moon", a.full ? `<b>${esc(a.blue ? "Blue Moon" : a.moonName)}</b> · ${esc(df(a.full))} <span class="muted">(${days(a.full)}d)</span>` : "—", a.blue ? `A second full moon this month (traditionally the ${esc(a.moonName)})` : "")}
       ${row("Meteors", esc(showerTxt))}
       ${row("Old calendar", a.cq ? `<b>${esc(a.cq.name)}</b> · ${esc(new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" }).format(a.cq.d))} <span class="muted">(${days(a.cq.d)}d)</span>` : "—", a.cq ? esc(a.cq.note) : "")}
+      ${row("Garden lore", a.waxing ? "Waxing moon: <b>sow and plant</b> crops that grow above ground" : "Waning moon: <b>plant roots</b>, weed, prune and harvest", "Traditional planting-by-the-moon")}
+      ${row("This month", `Birthstone <b>${esc(a.birth[0])}</b> · flower <b>${esc(a.birth[1])}</b>`)}
+      ${row("Zodiac", `<b>${esc(a.zod.sign)}</b> season`, `${esc(a.zod.next)} begins ${esc(df(a.zod.at))}`)}
       ${row("Year", `Day <b>${a.doy}</b> of ${a.len}`, `${Math.round(a.doy / a.len * 100)}% of the year gone`)}`;
   }
 
@@ -1360,7 +1384,7 @@
         <svg viewBox="0 0 ${S} ${S}" class="horo-wheel" style="color:var(--ink)" role="img" aria-label="Today's sky chart">${wheel}</svg>
         <div class="pl-list">${list}</div>
       </div>
-      <div class="horo-text">${horoscopeText(ch).map(l => `<p>${esc(l)}</p>`).join("")}</div>
+      <div class="horo-text cols">${horoscopeText(ch).map(l => `<p>${esc(l)}</p>`).join("")}</div>
       <div class="mystic-note">${MYSTIC_NOTE}</div>`;
   }
 
@@ -1394,25 +1418,7 @@
     out.push(end.reversed ? `Left unchecked, things could drift toward ${kw(end)} (${end.name}, reversed), so the advice matters.` : `If you follow it, the day is heading toward ${kw(end)} (${end.name}).`);
     return out;
   }
-  function tarotCardSVG(c) {
-    const suit = c.suit ? SUIT[c.suit] : null, col = suit ? suit[1] : "#7c3aed";
-    const SUIT_PATH = {
-      cups: "M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z",
-      pentacles: "M12 2l7.5 10L12 22 4.5 12z",
-      swords: "M12 2s8 6.5 8 11.5a4 4 0 0 1-6.6 3L14.2 21H9.8l.8-4.5A4 4 0 0 1 4 13.5C4 8.5 12 2 12 2z",
-      wands: "M12 2.5a3.8 3.8 0 0 1 3.4 5.6 3.8 3.8 0 1 1-1.9 6.6L14.4 21H9.6l.9-6.3a3.8 3.8 0 1 1-1.9-6.6A3.8 3.8 0 0 1 12 2.5z" };
-    const centre = suit ? `<path d="${SUIT_PATH[c.suit]}" transform="translate(32 62) scale(1.5)" fill="${col}"/>`
-      : `<circle cx="50" cy="80" r="24" fill="none" stroke="${col}" stroke-width="2"/><circle cx="50" cy="80" r="14" fill="${col}" opacity=".18"/><text x="50" y="87" text-anchor="middle" font-size="18" font-weight="700" fill="${col}">✦</text>`;
-    const words = c.name.replace(/^The /, "").split(" "), lines = []; let cur = "";
-    words.forEach(w => { if ((cur + " " + w).trim().length > 11) { lines.push(cur.trim()); cur = w; } else cur += " " + w; }); lines.push(cur.trim());
-    return `<svg viewBox="0 0 100 160" class="tcard${c.reversed ? " rev" : ""}">
-      <rect x="2" y="2" width="96" height="156" rx="9" fill="#fffdf7" stroke="${col}" stroke-width="2"/>
-      <rect x="8" y="8" width="84" height="144" rx="6" fill="none" stroke="${col}" stroke-opacity=".35"/>
-      <text x="50" y="28" text-anchor="middle" font-size="13" font-weight="800" fill="${col}">${esc(c.num)}</text>
-      ${centre}
-      ${lines.map((l, i) => `<text x="50" y="${128 + i * 12 - (lines.length - 1) * 6}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f2937">${esc(l)}</text>`).join("")}
-    </svg>`;
-  }
+  const tarotCardSVG = c => TarotCards.cardSVG(TAROT.find(d => d.name === c.name)).replace('class="tarot-card"', `class="tcard${c.reversed ? " rev" : ""}"`);
   function wTarot() {
     const cards = tarotDraw();
     const row = cards.map(c => `<figure class="tslot">${tarotCardSVG(c)}<figcaption><span class="tpos">${esc(c.pos)}</span><b>${esc(c.name)}${c.reversed ? " ↺" : ""}</b><span class="tiny muted">${esc(c.reversed ? c.rev : c.up)}</span></figcaption></figure>`).join("");
@@ -1665,6 +1671,7 @@
       out.push(...asciiSky(sk), "");
       sk.vis.forEach((c, i) => out.push(`${String(i + 1).padStart(2)}. ${c.name}`, `    Look ${dir16(c.azimuth)}, ${heightWord(c.altitude)} (altitude ${Math.round(c.altitude)}°, azimuth ${Math.round(c.azimuth)}°)`, `    ${c.tip}`));
       if (sk.moon.altitude > 0) out.push(` M. Moon: ${dir16(sk.moon.azimuth)}, ${heightWord(sk.moon.altitude)} (${Math.round(sk.mIll.fraction * 100)}% lit)`);
+      if (campsReady() && state.camps.list.length) { out.push("", "Stargazing campsites (darkest picks nearby, from OpenStreetMap):"); state.camps.list.slice(0, 6).forEach(c => out.push(`  - ${c.name}: ${Math.round(state.units === "f" ? c.km / 1.609 : c.km)} ${state.units === "f" ? "mi" : "km"} ${dir16(c.az)}${c.bits.length ? " (" + c.bits.join(", ") + ")" : ""}`)); }
       if (sk.rising.length) { out.push("", "Rising later tonight:"); sk.rising.forEach(c => out.push(`  - ${risingLine(c)}`)); }
       out.push("");
     }

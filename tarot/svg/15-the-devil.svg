@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320" class="tarot-card">
+  <defs>
+    <radialGradient id="bgt16" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#fffdf8"/><stop offset="1" stop-color="#fbf7ee"/></radialGradient>
+    <pattern id="ptt16" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r=".8" fill="#4c1d95" opacity=".10"/></pattern>
+  </defs>
+  <rect x="2" y="2" width="196" height="316" rx="14" fill="url(#bgt16)" stroke="#4c1d95" stroke-width="4"/>
+  <rect x="11" y="11" width="178" height="298" rx="8" fill="none" stroke="#c9a227" stroke-width="1.4"/>
+  <rect x="15" y="15" width="170" height="290" rx="6" fill="none" stroke="#c9a227" stroke-width=".6"/>
+  <path d="M24 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 19l5 5-5 5-5-5z" fill="#c9a227"/><path d="M24 291l5 5-5 5-5-5z" fill="#c9a227"/><path d="M176 291l5 5-5 5-5-5z" fill="#c9a227"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="#ede9fe"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="url(#ptt16)"/>
+  <rect x="26" y="58" width="148" height="176" rx="74" fill="none" stroke="#4c1d95" stroke-width="1.2" opacity=".35"/>
+  <circle cx="100" cy="36" r="17" fill="#4c1d95"/><circle cx="100" cy="36" r="14" fill="none" stroke="#c9a227" stroke-width="1"/>
+  <text x="100" y="41.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing=".5">XV</text>
+  <g transform="translate(35 81) scale(1.3)"><path d="M28 36c-6-12-2-22 6-26-2 8 0 14 6 18M72 36c6-12 2-22-6-26 2 8 0 14-6 18" fill="#4c1d95"/>
+      <path d="M50.00,54.00L46.47,44.85L36.69,44.33L44.29,38.15L41.77,28.67L50.00,34.00L58.23,28.67L55.71,38.15L63.31,44.33L53.53,44.85Z" fill="none" stroke="#c9a227" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="none" stroke="#4c1d95" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="62" width="14" height="9" rx="4.5"/><rect x="31" y="70" width="14" height="9" rx="4.5"/><rect x="43" y="74" width="14" height="9" rx="4.5"/><rect x="55" y="70" width="14" height="9" rx="4.5"/><rect x="66" y="62" width="14" height="9" rx="4.5"/></g></g>
+  <path d="M18 250h164l-8 15 8 15H18l8-15z" fill="#4c1d95"/>
+  <text x="100" y="270" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="700" fill="#fff" letter-spacing="1.2">THE DEVIL</text>
+  <text x="100" y="300" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="8" font-weight="700" fill="#4c1d95" letter-spacing="2" opacity=".75">MAJOR ARCANA</text>
+</svg>
