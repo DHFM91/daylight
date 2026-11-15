@@ -20,4 +20,4 @@ The "Today's Global Tarot Draw" widget shows the original 1909 Rider-Waite-Smith
 - Numbering follows the printed cards: VIII is Strength and XI is Justice, the same order as `tarot-cards.js`.
 - The same set, plus the full-size scans and per-card sources, lives in the Free Tarot Readings repo (`DHFM91/tarot-table`, `art/`).
 
-The vector deck in `svg/` and `tarot-cards.js` is kept for reuse in other programs.
+The vector deck in `svg/` and `tarot-cards.js` is kept for reuse in other programs. To show it on the dashboard again, set `TAROT_ART_STYLE = "simplified"` in `index.html`.

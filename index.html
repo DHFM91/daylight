@@ -1441,13 +1441,17 @@
     out.push(end.reversed ? `Left unchecked, things could drift toward ${kw(end)} (${end.name}, reversed), so the advice matters.` : `If you follow it, the day is heading toward ${kw(end)} (${end.name}).`);
     return out;
   }
-  // Card art: 1909 Rider-Waite-Smith deck (public domain), files in tarot/rws/ named by card id.
+  // Card art style: "classic" = 1909 Rider-Waite-Smith images in tarot/rws/ (public domain), named by card id;
+  // "simplified" = the drawn vector cards from tarot-cards.js.
+  const TAROT_ART_STYLE = "classic";
   // The deck runs Major Arcana 0-21, then Wands, Cups, Swords, Pentacles (Ace to King).
   const TAROT_SUITS = ["wands", "cups", "swords", "pentacles"];
   const tarotArtId = i => i < 22 ? "major-" + String(i).padStart(2, "0")
     : TAROT_SUITS[Math.floor((i - 22) / 14)] + "-" + String((i - 22) % 14 + 1).padStart(2, "0");
   const tarotCardSVG = c => {
     const i = TAROT.findIndex(d => d.name === c.name);
+    if (TAROT_ART_STYLE === "simplified")
+      return TarotCards.cardSVG(TAROT[i]).replace('class="tarot-card"', `class="tcard${c.reversed ? " rev" : ""}"`);
     return `<img class="tcard${c.reversed ? " rev" : ""}" src="tarot/rws/${tarotArtId(i)}.jpg" alt="${esc(c.name)}${c.reversed ? " (reversed)" : ""}" width="420" height="693" loading="lazy">`;
   };
   function wTarot() {
