@@ -233,6 +233,8 @@
   .horo-text { margin-top: 12px; font-size: .9rem; line-height: 1.5; color: var(--ink-soft); }
   .horo-text p { margin: 0 0 6px; }
   .mystic-note { margin-top: 10px; font-size: .74rem; color: var(--ink-faint); font-style: italic; }
+  .mystic-note.art-style { margin-top: 4px; }
+  .mystic-note.art-style button { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
   .trow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
   @media (max-width: 680px) { .trow { grid-template-columns: repeat(3, 1fr); } }
   .tslot { margin: 0; text-align: center; }
@@ -1441,25 +1443,31 @@
     out.push(end.reversed ? `Left unchecked, things could drift toward ${kw(end)} (${end.name}, reversed), so the advice matters.` : `If you follow it, the day is heading toward ${kw(end)} (${end.name}).`);
     return out;
   }
-  // Card art style: "classic" = 1909 Rider-Waite-Smith images in tarot/rws/ (public domain), named by card id;
-  // "simplified" = the drawn vector cards from tarot-cards.js.
+  // Card art style, switched by the "Art Style" link under the widget's note (remembered per device):
+  // "classic" = 1909 Rider-Waite-Smith images in tarot/rws/ (public domain), named by card id;
+  // "simplified" = the drawn vector cards from tarot-cards.js. TAROT_ART_STYLE is the first-visit default.
   const TAROT_ART_STYLE = "classic";
+  const TAROT_STYLE_NAMES = { classic: "Classic", simplified: "Simplified" };
+  let tarotArtStyle = TAROT_STYLE_NAMES[store.get("tarotArtStyle")] ? store.get("tarotArtStyle") : TAROT_ART_STYLE;
   // The deck runs Major Arcana 0-21, then Wands, Cups, Swords, Pentacles (Ace to King).
   const TAROT_SUITS = ["wands", "cups", "swords", "pentacles"];
   const tarotArtId = i => i < 22 ? "major-" + String(i).padStart(2, "0")
     : TAROT_SUITS[Math.floor((i - 22) / 14)] + "-" + String((i - 22) % 14 + 1).padStart(2, "0");
   const tarotCardSVG = c => {
     const i = TAROT.findIndex(d => d.name === c.name);
-    if (TAROT_ART_STYLE === "simplified")
+    if (tarotArtStyle === "simplified")
       return TarotCards.cardSVG(TAROT[i]).replace('class="tarot-card"', `class="tcard${c.reversed ? " rev" : ""}"`);
     return `<img class="tcard${c.reversed ? " rev" : ""}" src="tarot/rws/${tarotArtId(i)}.jpg" alt="${esc(c.name)}${c.reversed ? " (reversed)" : ""}" width="420" height="693" loading="lazy">`;
   };
   function wTarot() {
     const cards = tarotDraw();
-    const row = cards.map(c => `<figure class="tslot">${tarotCardSVG(c)}<figcaption><span class="tpos">${esc(c.pos)}</span><b>${esc(c.name)}${c.reversed ? " ↺" : ""}</b><span class="tiny muted">${esc(c.reversed ? c.rev : c.up)}</span></figcaption></figure>`).join("");
-    return `<div class="trow">${row}</div>
+    return `<div class="trow">${tarotRow(cards)}</div>
       <div class="horo-text" style="margin-top:12px">${tarotReading(cards).map(l => `<p>${esc(l)}</p>`).join("")}</div>
-      <div class="mystic-note">Same draw for everyone today; a new spread at midnight. ↺ = reversed. ${MYSTIC_NOTE}</div>`;
+      <div class="mystic-note">Same draw for everyone today; a new spread at midnight. ↺ = reversed. ${MYSTIC_NOTE}</div>
+      <div class="mystic-note art-style"><button type="button" id="tarotArtStyle" title="Switch card art">Art Style: ${TAROT_STYLE_NAMES[tarotArtStyle]}</button></div>`;
+  }
+  function tarotRow(cards) {
+    return cards.map(c => `<figure class="tslot">${tarotCardSVG(c)}<figcaption><span class="tpos">${esc(c.pos)}</span><b>${esc(c.name)}${c.reversed ? " ↺" : ""}</b><span class="tiny muted">${esc(c.reversed ? c.rev : c.up)}</span></figcaption></figure>`).join("");
   }
 
   const RENDER = { now: wNow, hourly: wHourly, daily: wDaily, air: wAir, sun: wSun, moon: wMoon, tides: wTides, sky: wSky, almanac: wAlmanac, horoscope: wHoroscope, tarot: wTarot };
@@ -1498,6 +1506,14 @@
   }
 
   $("#grid").addEventListener("click", e => {
+    const art = e.target.closest("#tarotArtStyle");
+    if (art) {   // switch tarot card art in place, without redrawing the other widgets
+      tarotArtStyle = tarotArtStyle === "classic" ? "simplified" : "classic";
+      store.set("tarotArtStyle", tarotArtStyle);
+      const row = $('.card[data-id="tarot"] .trow'); if (row) row.innerHTML = tarotRow(tarotDraw());
+      art.textContent = "Art Style: " + TAROT_STYLE_NAMES[tarotArtStyle];
+      return;
+    }
     const b = e.target.closest("button[data-act]"); if (!b) return;
     const id = b.closest(".card").dataset.id, visible = shownIds();
     if (b.dataset.act === "hide") state.hidden.push(id);
