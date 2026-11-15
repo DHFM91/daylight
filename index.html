@@ -233,7 +233,7 @@
   .horo-text { margin-top: 12px; font-size: .9rem; line-height: 1.5; color: var(--ink-soft); }
   .horo-text p { margin: 0 0 6px; }
   .mystic-note { margin-top: 10px; font-size: .74rem; color: var(--ink-faint); font-style: italic; }
-  .mystic-note.art-style { margin-top: 4px; }
+  .mystic-note.line, .mystic-note.art-style { margin-top: 4px; }
   .mystic-note.art-style button { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
   .trow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
   @media (max-width: 680px) { .trow { grid-template-columns: repeat(3, 1fr); } }
@@ -1252,7 +1252,7 @@
   /* =========================================================
      Almanac · Sky horoscope · Daily tarot
      ========================================================= */
-  const MYSTIC_NOTE = "For fun and tradition only. Astrology and tarot aren't scientific predictions.";
+  const MYSTIC_NOTE = "For fun, entertainment, and self-reflection only. No advice of any kind is implied and no liability is assumed by the creator. Your choices are your own, and astrology and tarot are not considered scientific predictions.";
 
   // seeded random so a given date gives everyone the same draw / lore
   function seededRandom(str) {
@@ -1463,7 +1463,8 @@
     const cards = tarotDraw();
     return `<div class="trow">${tarotRow(cards)}</div>
       <div class="horo-text" style="margin-top:12px">${tarotReading(cards).map(l => `<p>${esc(l)}</p>`).join("")}</div>
-      <div class="mystic-note">Same draw for everyone today; a new spread at midnight. ↺ = reversed. ${MYSTIC_NOTE}</div>
+      <div class="mystic-note">Same draw for everyone today; a new spread at midnight. ↺ = reversed.</div>
+      <div class="mystic-note line">${MYSTIC_NOTE}</div>
       <div class="mystic-note art-style"><button type="button" id="tarotArtStyle" title="Switch card art">Art Style: ${TAROT_STYLE_NAMES[tarotArtStyle]}</button></div>`;
   }
   function tarotRow(cards) {
