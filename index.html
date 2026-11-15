@@ -236,7 +236,7 @@
   .trow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
   @media (max-width: 680px) { .trow { grid-template-columns: repeat(3, 1fr); } }
   .tslot { margin: 0; text-align: center; }
-  .tcard { width: 100%; max-width: 150px; height: auto; display: block; margin: 0 auto 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.12)); }
+  .tcard { width: 100%; max-width: 150px; height: auto; display: block; margin: 0 auto 8px; border-radius: 6px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.12)); }
   .tcard.rev { transform: rotate(180deg); }
   .tslot figcaption { display: flex; flex-direction: column; gap: 2px; font-size: .84rem; line-height: 1.3; }
   .tpos { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
@@ -1441,7 +1441,15 @@
     out.push(end.reversed ? `Left unchecked, things could drift toward ${kw(end)} (${end.name}, reversed), so the advice matters.` : `If you follow it, the day is heading toward ${kw(end)} (${end.name}).`);
     return out;
   }
-  const tarotCardSVG = c => TarotCards.cardSVG(TAROT.find(d => d.name === c.name)).replace('class="tarot-card"', `class="tcard${c.reversed ? " rev" : ""}"`);
+  // Card art: 1909 Rider-Waite-Smith deck (public domain), files in tarot/rws/ named by card id.
+  // The deck runs Major Arcana 0-21, then Wands, Cups, Swords, Pentacles (Ace to King).
+  const TAROT_SUITS = ["wands", "cups", "swords", "pentacles"];
+  const tarotArtId = i => i < 22 ? "major-" + String(i).padStart(2, "0")
+    : TAROT_SUITS[Math.floor((i - 22) / 14)] + "-" + String((i - 22) % 14 + 1).padStart(2, "0");
+  const tarotCardSVG = c => {
+    const i = TAROT.findIndex(d => d.name === c.name);
+    return `<img class="tcard${c.reversed ? " rev" : ""}" src="tarot/rws/${tarotArtId(i)}.jpg" alt="${esc(c.name)}${c.reversed ? " (reversed)" : ""}" width="420" height="693" loading="lazy">`;
+  };
   function wTarot() {
     const cards = tarotDraw();
     const row = cards.map(c => `<figure class="tslot">${tarotCardSVG(c)}<figcaption><span class="tpos">${esc(c.pos)}</span><b>${esc(c.name)}${c.reversed ? " ↺" : ""}</b><span class="tiny muted">${esc(c.reversed ? c.rev : c.up)}</span></figcaption></figure>`).join("");
