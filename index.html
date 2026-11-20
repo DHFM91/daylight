@@ -246,6 +246,9 @@
   .rising { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: .84rem; color: var(--ink-soft); }
   .rising .k { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
   .horo-text.cols { columns: 2; column-gap: 22px; }
+  .horo-plain { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--ink) 6%, transparent); font-size: .9rem; line-height: 1.5; color: var(--ink); }
+  .horo-plain b { display: block; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 3px; }
+  .horo-plain p { margin: 0; }
   .horo-text.cols p { break-inside: avoid; }
   @media (max-width: 980px) { .horo-text.cols { columns: 1; } }
   .aqi-strip { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; align-items: end; height: 34px; margin-top: 6px; }
@@ -1376,6 +1379,13 @@
     const elements = [0, 0, 0, 0]; pos.slice(0, 7).forEach(p => elements[p.sign % 4]++);
     return { pos, asp, elements };
   }
+  // Most common element among Sun..Saturn; ties go to the Moon's element, then the Sun's (instead of always "fire")
+  function domElement(ch) {
+    const max = Math.max(...ch.elements), top = [0, 1, 2, 3].filter(i => ch.elements[i] === max);
+    if (top.length === 1) return top[0];
+    const m = ch.pos[1].sign % 4, s = ch.pos[0].sign % 4;
+    return top.includes(m) ? m : top.includes(s) ? s : top[0];
+  }
   function horoscopeText(ch) {
     const sun = ch.pos[0], moon = ch.pos[1], ill = astro.moonIllumination(new Date());
     const lines = [];
@@ -1386,9 +1396,48 @@
     ch.asp.slice(0, 3).forEach(x => lines.push(`${x.a.label} ${x.verb} ${x.b.label}, linking ${x.a.rules} with ${x.b.rules}.`));
     const rx = ch.pos.filter(p => p.retro && RETRO_NOTE[p.id]);
     if (rx.length) lines.push(`Retrograde: ${rx.map(p => `${p.label} (${RETRO_NOTE[p.id]})`).join("; ")}.`);
-    const dom = ch.elements.indexOf(Math.max(...ch.elements));
+    const dom = domElement(ch);
     lines.push(`Most of the inner sky sits in ${ELEMENT[dom]} signs, so the day leans ${["bold and active", "grounded and practical", "social and mental", "emotional and intuitive"][dom]}.`);
     return lines;
+  }
+  // "In plain English" summary: what a horoscope writer would actually tell you about today's chart
+  const PLAIN_SEASON = ["a push to start fresh and be brave", "slowing down and enjoying what you already have", "learning, chatting and trying new things", "home, family and looking after yourself",
+    "having fun, making things and letting yourself shine", "getting organized and taking care of your health", "relationships, compromise and fairness", "being honest with yourself and letting go of what's done",
+    "adventure, learning and seeing the bigger picture", "hard work, goals and long-term plans", "friends, community and fresh ideas", "rest, kindness and creative daydreaming"];
+  const PLAIN_FEEL = ["feisty and impatient", "calm and comfort-seeking", "chatty and easily distracted", "sensitive and a little homesick", "warm and attention-loving", "practical and a bit picky",
+    "friendly and eager to keep the peace", "intense and private", "upbeat and restless", "serious and businesslike", "independent and a bit aloof", "dreamy and soft-hearted"];
+  const PLAIN_DO = ["start the thing you've been putting off", "treat yourself to something comforting", "reach out and catch up with people", "stay close to home and the people you love",
+    "do something that makes you proud", "knock out chores and small fixes", "smooth things over with someone", "trust your gut", "make plans and say yes to something new",
+    "buckle down on serious work", "try a different approach", "rest and let your imagination roam"];
+  const PLAIN_TOPIC = { sun: "your sense of self", moon: "your emotions", mercury: "communication", venus: "your love life", mars: "your energy",
+    jupiter: "opportunity", saturn: "responsibility", uranus: "the unexpected", neptune: "your intuition", pluto: "control" };
+  const PLAIN_RETRO = { mercury: "Mercury is retrograde, which astrologers blame for mix-ups: reread messages before you hit send and leave extra time for travel and tech.",
+    venus: "Venus is retrograde, so think twice before big purchases or rekindling an old romance.", mars: "Mars is retrograde, so pushing hard tends to backfire; slow and steady works better." };
+  const PLAIN_ASPECT = {   // two wordings each, so two aspects of the same kind don't repeat
+    conjunct: [(a, b) => `${a} and ${b} are tangled together right now, so expect one to color the other.`, (a, b) => `${a} and ${b} are joined at the hip today; what happens with one affects the other.`],
+    sextile: [(a, b) => `There's a quiet opening where ${a} and ${b} meet; a little effort there pays off.`, (a, b) => `${a} and ${b} can help each other along if you give them a nudge.`],
+    square: [(a, b) => `Expect some friction between ${a} and ${b}. Don't force it.`, (a, b) => `${a} and ${b} are at odds, so tempers or plans may snag there.`],
+    trine: [(a, b) => `${a} and ${b} work nicely together today, so lean into that.`, (a, b) => `${a} and ${b} are in easy harmony, which makes that area feel smooth.`],
+    opposite: [(a, b) => `${a} and ${b} pull in different directions, so look for a middle ground.`, (a, b) => `${a} and ${b} are in a tug-of-war; balance beats picking a side.`] };
+  const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+  function plainReading(ch) {
+    const sun = ch.pos[0], moon = ch.pos[1], waxing = astro.moonIllumination(new Date()).phase < 0.5;
+    const dom = domElement(ch);
+    const out = [];
+    out.push(`Overall, today feels ${["bold and get-up-and-go", "grounded and practical", "social and talkative", "emotional and intuitive"][dom]}, and people's moods are likely to run ${PLAIN_FEEL[moon.sign]}.`);
+    out.push(`We're in ${SIGNS[sun.sign]} season, a stretch of the year that's about ${PLAIN_SEASON[sun.sign]}.`);
+    out.push(waxing ? "The Moon is growing, which traditionally favors starting things and building momentum."
+                    : "The Moon is shrinking, which traditionally favors finishing things, clearing clutter and resting.");
+    const all = ch.asp.filter(x => !(x.a.id === "sun" && x.b.id === "moon"));   // Sun-Moon angle is just the phase, already covered
+    const seen = {};
+    all.slice(0, 2).forEach(x => { const v = seen[x.name] = (seen[x.name] ?? -1) + 1; out.push(cap(PLAIN_ASPECT[x.name][v % 2](PLAIN_TOPIC[x.a.id], PLAIN_TOPIC[x.b.id]))); });
+    const rx = ch.pos.find(p => p.retro && PLAIN_RETRO[p.id]);
+    if (rx) out.push(PLAIN_RETRO[rx.id]);
+    const easy = all.find(x => x.name === "trine" || x.name === "sextile"), hard = all.find(x => x.name === "square" || x.name === "opposite");
+    const lean = easy ? `make the most of anything involving ${PLAIN_TOPIC[easy.a.id]} or ${PLAIN_TOPIC[easy.b.id]}` : waxing ? "get new things moving" : "wrap up what's unfinished";
+    const watch = hard ? `go easy where ${PLAIN_TOPIC[hard.a.id]} and ${PLAIN_TOPIC[hard.b.id]} collide` : rx && rx.id === "mercury" ? "double-check the details" : "don't overthink it";
+    out.push(`Key takeaways: ${PLAIN_DO[moon.sign]}, ${lean}, and ${watch}.`);
+    return out.join(" ");
   }
   function wHoroscope() {
     const ch = skyChart(), S = 300, C = 150, R1 = 140, R2 = 112, R3 = 84;
@@ -1412,6 +1461,7 @@
         <div class="pl-list">${list}</div>
       </div>
       <div class="horo-text cols">${horoscopeText(ch).map(l => `<p>${esc(l)}</p>`).join("")}</div>
+      <div class="horo-plain"><b>In plain English</b><p>${esc(plainReading(ch))}</p></div>
       <div class="mystic-note">${MYSTIC_NOTE}</div>`;
   }
 
@@ -1740,7 +1790,7 @@
       out.push("SKY HOROSCOPE (for fun)", sub);
       ch.pos.forEach(pl => out.push(`  ${pl.label.padEnd(9)} ${SIGNS[pl.sign].padEnd(12)} ${Math.floor(pl.deg).toString().padStart(2)}°${pl.retro ? "  retrograde" : ""}`));
       if (ch.asp.length) { out.push("", "Tightest aspects:"); ch.asp.slice(0, 5).forEach(x => out.push(`  ${x.a.label} ${x.name} ${x.b.label} (orb ${x.orb.toFixed(1)}°)`)); }
-      out.push("", ...horoscopeText(ch), ""); }
+      out.push("", ...horoscopeText(ch), "", "In plain English:", plainReading(ch), ""); }
     { const cards = tarotDraw();
       out.push("DAILY TAROT (for fun)", sub);
       cards.forEach((c, i) => out.push(`  ${i + 1}. ${c.pos}: ${c.name}${c.reversed ? " (reversed)" : ""}`, `     ${c.reversed ? c.rev : c.up}`));
