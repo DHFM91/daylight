@@ -1,7 +1,7 @@
 """Build the constellation stick-figure icons in ../constellations/.
 
 Each figure is drawn from real star positions (J2000 RA/Dec) projected
-around the constellation's centre, with north up and east LEFT, the way
+around the constellation's center, with north up and east LEFT, the way
 it looks when you face it in the sky. Brighter stars get bigger dots.
 Run:  python3 tools/make-constellations.py
 """
@@ -196,7 +196,7 @@ FIG["carina"] = dict(stars={
 
 def project(stars, extra=()):
     pts = [(a, d) for a, d, *_ in stars.values()] + list(extra)
-    # centre: mean unit vector
+    # center: mean unit vector
     vx = sum(math.cos(math.radians(d)) * math.cos(math.radians(a)) for a, d in pts)
     vy = sum(math.cos(math.radians(d)) * math.sin(math.radians(a)) for a, d in pts)
     vz = sum(math.sin(math.radians(d)) for a, d in pts)

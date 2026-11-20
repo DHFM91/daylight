@@ -1165,7 +1165,7 @@
     if (!dark) {
       return `<div class="skeleton" style="color:var(--ink)"><b>No proper darkness tonight</b><br><span class="muted">At this time of year the sky here doesn't get dark enough to see the constellations well.</span></div>`;
     }
-    // sky map: horizon circle, zenith in centre. Held overhead, so north is up and east is LEFT.
+    // sky map: horizon circle, zenith in center. Drawn as seen looking up, so with N at top, east is LEFT.
     const S = 360, C = S / 2, R = 150;
     const xy = (alt, az) => { const r = R * (90 - alt) / 90, a = az * Math.PI / 180; return [C - r * Math.sin(a), C - r * Math.cos(a)]; };
     let rings = "";
@@ -1191,7 +1191,7 @@
         <div class="where">Look ${dir16(c.azimuth)}, ${heightWord(c.altitude)} (${Math.round(c.altitude)}°)</div>
         <div class="tip">${esc(c.tip)}</div></div>${c.img ? `<img class="const-fig" src="constellations/${c.img}.svg" alt="Star pattern of ${esc(c.name)}" width="64" height="64" loading="lazy">` : ""}</div>`).join("") : `<div class="skeleton">None of the major constellations are well placed right then.</div>`;
     return `<div class="sky-wrap">
-        <div>${map}<div class="tiny muted" style="text-align:center;margin-top:4px">Hold overhead: north up, east left, centre straight up.</div>${campsHTML(3)}</div>
+        <div>${map}<div class="tiny muted" style="text-align:center;margin-top:4px">Turn the map so the direction you're facing is at the bottom. That edge is the horizon in front of you; the center is straight overhead.</div>${campsHTML(3)}</div>
         <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div><div class="const-grid">${list}</div>${moonNote}${risingHTML(rising)}</div>
       </div>`;
   }
@@ -1345,7 +1345,7 @@
   const SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
   const SIGN_GLYPH = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"].map(g => g + "︎");
   const ELEMENT = ["fire", "earth", "air", "water"];
-  const SIGN_FOCUS = ["courage and fresh starts", "comfort, patience and the senses", "ideas, talk and curiosity", "home, family and feelings", "creativity, pride and play", "detail, health and getting organised",
+  const SIGN_FOCUS = ["courage and fresh starts", "comfort, patience and the senses", "ideas, talk and curiosity", "home, family and feelings", "creativity, pride and play", "detail, health and getting organized",
     "balance, partners and fairness", "depth, intensity and what's hidden", "adventure, big ideas and honesty", "ambition, structure and the long game", "friends, causes and the unconventional", "dreams, empathy and imagination"];
   const MOON_MOOD = ["impatient and energetic; good for starting things, quick tempers", "steady and sensual; good food and unhurried pleasures", "chatty and restless; messages, errands and changing your mind",
     "tender and homebound; moods run close to the surface", "warm and expressive; a day to be seen and to celebrate", "practical and fussy; satisfying for chores and fixing things",
@@ -1748,7 +1748,7 @@
     out.push(line, "Weather and air quality: Open-Meteo.com (CC BY 4.0).", "Sun and moon: calculated in the browser; times are approximate to about a minute.", line, "");
     return out.join("\n");
   }
-  // Text sky map: zenith in the centre, horizon as the ring, north up, east left (held overhead)
+  // Text sky map: zenith in the center, horizon as the ring, drawn N at top / E at left (looking up)
   function asciiSky(sk) {
     const W = 49, H = 25, cx = 24, cy = 12, rx = 22, ry = 11;   // characters are ~2x taller than wide
     const g = Array.from({ length: H }, () => Array(W).fill(" "));
@@ -1761,7 +1761,7 @@
     const rows = g.map(r => "      " + r.join(""));
     rows.unshift(" ".repeat(6 + cx) + "N"); rows.push(" ".repeat(6 + cx) + "S");
     const mid = cy + 1; rows[mid] = "   E  " + rows[mid].slice(6) + "  W";
-    rows.push("", "      Hold overhead: N at top, E on the left. + is straight up,", "      the dotted ring is the horizon. M = Moon.");
+    rows.push("", "      Turn it so the direction you face is at the bottom: that", "      edge is the horizon ahead of you. + is straight overhead,", "      the dotted ring is the horizon. M = Moon.");
     return rows;
   }
   function reportFileName() {

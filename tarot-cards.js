@@ -126,7 +126,7 @@ var TAROT = [
   const place = (inner, x, y, size) => `<g transform="translate(${(x - size / 2).toFixed(1)} ${(y - size / 2).toFixed(1)}) scale(${(size / 24).toFixed(3)})">${inner}</g>`;
 
   /* ---------- Major Arcana emblems, drawn in a 0..100 box ---------- */
-  // c = ink colour, t = tint, g = gold
+  // c = ink color, t = tint, g = gold
   const S = (c, w = 2.6) => `fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
   const sunRays = (cx, cy, r, R, n, c, w = 2.4) => Array.from({ length: n }, (_, i) => { const a = i * 2 * Math.PI / n; return `<path d="M${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}L${(cx + R * Math.cos(a)).toFixed(1)},${(cy + R * Math.sin(a)).toFixed(1)}" ${S(c, w)}/>`; }).join("");
   const MAJOR_ART = [
@@ -217,7 +217,7 @@ var TAROT = [
   };
   const COURT_TITLE = { P: "Page", Kn: "Knight", Q: "Queen", K: "King" };
 
-  /* ---------- pip layouts for 2..10 (art zone centre 100,145) ---------- */
+  /* ---------- pip layouts for 2..10 (art zone center 100,145) ---------- */
   const L = 72, R = 128, M = 100;
   const PIPS = {
     2: [[M, 95], [M, 195]], 3: [[M, 82], [M, 145], [M, 208]], 4: [[L, 95], [R, 95], [L, 195], [R, 195]],
