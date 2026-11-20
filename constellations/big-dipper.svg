@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+<rect width="96" height="96" rx="12" fill="#11163a"/>
+<polyline points="79.5,30.3 85.0,45.5 64.7,57.7 55.0,48.5 79.5,30.3" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="55.0,48.5 39.1,51.1 26.2,52.0 11.0,65.7" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="55.0" cy="48.5" r="1.72" fill="#fef3c7"/>
+<circle cx="64.7" cy="57.7" r="2.37" fill="#fef3c7"/>
+<circle cx="85.0" cy="45.5" r="2.42" fill="#fef3c7"/>
+<circle cx="26.2" cy="52.0" r="2.50" fill="#fef3c7"/>
+<circle cx="11.0" cy="65.7" r="2.81" fill="#fef3c7"/>
+<circle cx="79.5" cy="30.3" r="2.86" fill="#fef3c7"/>
+<circle cx="39.1" cy="51.1" r="2.87" fill="#fef3c7"/>
+</svg>

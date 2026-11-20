@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+<rect width="96" height="96" rx="12" fill="#11163a"/>
+<polyline points="53.5,56.8 51.9,52.4 48.9,48.7 19.6,24.5" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="53.5,56.8 48.7,56.2 44.8,54.6 11.0,41.2" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="53.5,56.8 64.1,63.9 85.0,71.5" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="73.3" cy="35.1" r="1.30" fill="#fef3c7"/>
+<circle cx="72.0" cy="38.1" r="1.30" fill="#fef3c7"/>
+<circle cx="72.5" cy="35.7" r="1.30" fill="#fef3c7"/>
+<circle cx="51.9" cy="52.4" r="1.40" fill="#fef3c7"/>
+<circle cx="73.8" cy="37.1" r="1.30" fill="#fef3c7"/>
+<circle cx="53.5" cy="56.8" r="1.46" fill="#fef3c7"/>
+<circle cx="85.0" cy="71.5" r="1.50" fill="#fef3c7"/>
+<circle cx="68.3" cy="37.7" r="1.30" fill="#fef3c7"/>
+<circle cx="48.9" cy="48.7" r="1.58" fill="#fef3c7"/>
+<circle cx="48.7" cy="56.2" r="1.65" fill="#fef3c7"/>
+<circle cx="64.1" cy="63.9" r="1.65" fill="#fef3c7"/>
+<circle cx="11.0" cy="41.2" r="1.95" fill="#fef3c7"/>
+<circle cx="70.4" cy="37.4" r="1.30" fill="#fef3c7"/>
+<circle cx="19.6" cy="24.5" r="2.96" fill="#fef3c7"/>
+<circle cx="44.8" cy="54.6" r="6.56" fill="#fde68a" opacity=".18"/>
+<circle cx="44.8" cy="54.6" r="3.56" fill="#fef3c7"/>
+</svg>

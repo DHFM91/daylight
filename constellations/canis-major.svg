@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+<rect width="96" height="96" rx="12" fill="#11163a"/>
+<polyline points="83.4,23.4 56.5,16.5 43.2,18.1 33.9,11.0" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="56.5,16.5 35.5,52.3 29.6,65.4 12.6,80.9" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="29.6,65.4 40.7,78.1 82.8,85.0" fill="none" stroke="#a5b4fc" stroke-opacity=".85" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="43.2" cy="18.1" r="1.70" fill="#fef3c7"/>
+<circle cx="33.9" cy="11.0" r="1.70" fill="#fef3c7"/>
+<circle cx="35.5" cy="52.3" r="1.95" fill="#fef3c7"/>
+<circle cx="82.8" cy="85.0" r="1.95" fill="#fef3c7"/>
+<circle cx="12.6" cy="80.9" r="2.36" fill="#fef3c7"/>
+<circle cx="83.4" cy="23.4" r="2.72" fill="#fef3c7"/>
+<circle cx="29.6" cy="65.4" r="2.82" fill="#fef3c7"/>
+<circle cx="40.7" cy="78.1" r="6.08" fill="#fde68a" opacity=".18"/>
+<circle cx="40.7" cy="78.1" r="3.08" fill="#fef3c7"/>
+<circle cx="56.5" cy="16.5" r="8.29" fill="#fde68a" opacity=".18"/>
+<circle cx="56.5" cy="16.5" r="5.29" fill="#fef3c7"/>
+</svg>

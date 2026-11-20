@@ -206,10 +206,11 @@
   @media (max-width: 760px) { .sky-wrap { grid-template-columns: 1fr; } }
   .sky-svg { width: 100%; height: auto; display: block; }
   .sky-when { font-weight: 600; margin-bottom: 10px; }
-  .const-row { display: grid; grid-template-columns: 24px 1fr; gap: 9px; padding: 9px 0; border-top: 1px solid var(--line); }
+  .const-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 9px; padding: 9px 0; border-top: 1px solid var(--line); }
   .const-row:first-of-type { border-top: 0; }
   .const-row .num { width: 24px; height: 24px; border-radius: 50%; background: #312e81; color: #fde68a; font-size: .75rem; font-weight: 700; display: grid; place-items: center; }
   .const-row b { font-weight: 700; }
+  .const-row .const-fig { width: 64px; height: 64px; border-radius: 9px; align-self: start; margin-top: 2px; }
   .const-row .where { color: var(--ink-soft); font-size: .9rem; }
   .const-row .tip { color: var(--ink-faint); font-size: .8rem; margin-top: 1px; line-height: 1.35; }
   .season { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
@@ -1094,28 +1095,29 @@
   }
   /* ---------- night sky ---------- */
   // Anchor = the constellation's easiest-to-find bright star or shape (RA hours, Dec degrees)
+  // img = stick-figure icon in constellations/ (built from real star positions by tools/make-constellations.py)
   const CONSTELLATIONS = [
-    { name: "Orion", ra: 5.6, dec: 3, tip: "Three bright stars in a short straight row (the Belt), between red Betelgeuse and blue-white Rigel." },
-    { name: "Big Dipper (Ursa Major)", ra: 11.8, dec: 55, tip: "Seven stars shaped like a ladle. The two stars at the end of the cup point to Polaris." },
-    { name: "Polaris, the North Star", ra: 2.53, dec: 89.3, tip: "Not the brightest star, but it stays put while everything turns around it. Marks due north." },
-    { name: "Cassiopeia", ra: 0.9, dec: 60, tip: "Five stars in a bold W or M shape, opposite the Big Dipper across Polaris." },
-    { name: "Cygnus (Northern Cross)", ra: 20.6, dec: 42, tip: "A big cross with bright Deneb at the top, flying along the Milky Way." },
-    { name: "Lyra (Vega)", ra: 18.62, dec: 38.8, tip: "Vega is a brilliant blue-white star with a tiny parallelogram of stars beside it." },
-    { name: "Aquila (Altair)", ra: 19.85, dec: 8.9, tip: "Altair sits between two fainter stars. With Vega and Deneb it forms the Summer Triangle." },
-    { name: "Scorpius", ra: 16.9, dec: -30, tip: "A curving fishhook of stars with red Antares at the heart. Hugs the southern horizon." },
-    { name: "Sagittarius (the Teapot)", ra: 19.0, dec: -28, tip: "Eight stars shaped like a teapot. The Milky Way rises like steam from its spout." },
-    { name: "Leo", ra: 10.7, dec: 15, tip: "A backwards question mark (the Sickle) ending at bright Regulus, plus a triangle for the tail." },
-    { name: "Taurus & the Pleiades", ra: 4.2, dec: 19, tip: "Orange Aldebaran in a V of stars, with the tiny dipper-shaped Pleiades cluster just above." },
-    { name: "Gemini", ra: 7.5, dec: 30, tip: "Twin bright stars, Castor and Pollux, side by side above and left of Orion." },
-    { name: "Canis Major (Sirius)", ra: 6.75, dec: -16.7, tip: "Sirius is the brightest star in the night sky. Follow Orion's Belt down and to the left." },
-    { name: "Auriga (Capella)", ra: 5.3, dec: 44, tip: "Bright yellowish Capella leads a lopsided pentagon of stars, high above Orion in winter." },
-    { name: "Boötes (Arcturus)", ra: 14.26, dec: 19.2, tip: "Follow the arc of the Big Dipper's handle to bright orange Arcturus." },
-    { name: "Virgo (Spica)", ra: 13.42, dec: -11.2, tip: "Keep following the Dipper's arc past Arcturus to blue-white Spica." },
-    { name: "Pegasus (Great Square)", ra: 23.3, dec: 20, tip: "Four stars making a large, nearly empty square. Easy to spot in autumn." },
-    { name: "Andromeda", ra: 0.8, dec: 38, tip: "A chain of stars off the Great Square. On a dark night look for the faint smudge of the Andromeda Galaxy." },
-    { name: "Southern Cross (Crux)", ra: 12.45, dec: -60, tip: "A small, bright kite-shaped cross. Points toward the south celestial pole." },
-    { name: "Centaurus (Alpha Centauri)", ra: 14.66, dec: -60.8, tip: "Two brilliant pointer stars next to the Southern Cross. Alpha Centauri is the nearest star system." },
-    { name: "Carina (Canopus)", ra: 6.4, dec: -52.7, tip: "Canopus is the second brightest star in the sky, low in the south for mid-southern latitudes." }
+    { name: "Orion", img: "orion", ra: 5.6, dec: 3, tip: "Three bright stars in a short straight row (the Belt), between red Betelgeuse and blue-white Rigel." },
+    { name: "Big Dipper (Ursa Major)", img: "big-dipper", ra: 11.8, dec: 55, tip: "Seven stars shaped like a ladle. The two stars at the end of the cup point to Polaris." },
+    { name: "Polaris, the North Star", img: "polaris", ra: 2.53, dec: 89.3, tip: "Not the brightest star, but it stays put while everything turns around it. Marks due north." },
+    { name: "Cassiopeia", img: "cassiopeia", ra: 0.9, dec: 60, tip: "Five stars in a bold W or M shape, opposite the Big Dipper across Polaris." },
+    { name: "Cygnus (Northern Cross)", img: "cygnus", ra: 20.6, dec: 42, tip: "A big cross with bright Deneb at the top, flying along the Milky Way." },
+    { name: "Lyra (Vega)", img: "lyra", ra: 18.62, dec: 38.8, tip: "Vega is a brilliant blue-white star with a tiny parallelogram of stars beside it." },
+    { name: "Aquila (Altair)", img: "aquila", ra: 19.85, dec: 8.9, tip: "Altair sits between two fainter stars. With Vega and Deneb it forms the Summer Triangle." },
+    { name: "Scorpius", img: "scorpius", ra: 16.9, dec: -30, tip: "A curving fishhook of stars with red Antares at the heart. Hugs the southern horizon." },
+    { name: "Sagittarius (the Teapot)", img: "sagittarius", ra: 19.0, dec: -28, tip: "Eight stars shaped like a teapot. The Milky Way rises like steam from its spout." },
+    { name: "Leo", img: "leo", ra: 10.7, dec: 15, tip: "A backwards question mark (the Sickle) ending at bright Regulus, plus a triangle for the tail." },
+    { name: "Taurus & the Pleiades", img: "taurus", ra: 4.2, dec: 19, tip: "Orange Aldebaran in a V of stars, with the tiny dipper-shaped Pleiades cluster just above." },
+    { name: "Gemini", img: "gemini", ra: 7.5, dec: 30, tip: "Twin bright stars, Castor and Pollux, side by side above and left of Orion." },
+    { name: "Canis Major (Sirius)", img: "canis-major", ra: 6.75, dec: -16.7, tip: "Sirius is the brightest star in the night sky. Follow Orion's Belt down and to the left." },
+    { name: "Auriga (Capella)", img: "auriga", ra: 5.3, dec: 44, tip: "Bright yellowish Capella leads a lopsided pentagon of stars, high above Orion in winter." },
+    { name: "Boötes (Arcturus)", img: "bootes", ra: 14.26, dec: 19.2, tip: "Follow the arc of the Big Dipper's handle to bright orange Arcturus." },
+    { name: "Virgo (Spica)", img: "virgo", ra: 13.42, dec: -11.2, tip: "Keep following the Dipper's arc past Arcturus to blue-white Spica." },
+    { name: "Pegasus (Great Square)", img: "pegasus", ra: 23.3, dec: 20, tip: "Four stars making a large, nearly empty square. Easy to spot in autumn." },
+    { name: "Andromeda", img: "andromeda", ra: 0.8, dec: 38, tip: "A chain of stars off the Great Square. On a dark night look for the faint smudge of the Andromeda Galaxy." },
+    { name: "Southern Cross (Crux)", img: "crux", ra: 12.45, dec: -60, tip: "A small, bright kite-shaped cross. Points toward the south celestial pole." },
+    { name: "Centaurus (Alpha Centauri)", img: "centaurus", ra: 14.66, dec: -60.8, tip: "Two brilliant pointer stars next to the Southern Cross. Alpha Centauri is the nearest star system." },
+    { name: "Carina (Canopus)", img: "carina", ra: 6.4, dec: -52.7, tip: "Canopus is the second brightest star in the sky, low in the south for mid-southern latitudes." }
   ];
   const DIR16 = ["north", "north-northeast", "northeast", "east-northeast", "east", "east-southeast", "southeast", "south-southeast", "south", "south-southwest", "southwest", "west-southwest", "west", "west-northwest", "northwest", "north-northwest"];
   const dir16 = az => DIR16[Math.round(((az % 360) + 360) % 360 / 22.5) % 16];
@@ -1187,7 +1189,7 @@
     const list = vis.length ? vis.map((c, i) => `<div class="const-row"><span class="num">${i + 1}</span><div>
         <b>${esc(c.name)}</b>
         <div class="where">Look ${dir16(c.azimuth)}, ${heightWord(c.altitude)} (${Math.round(c.altitude)}°)</div>
-        <div class="tip">${esc(c.tip)}</div></div></div>`).join("") : `<div class="skeleton">None of the major constellations are well placed right then.</div>`;
+        <div class="tip">${esc(c.tip)}</div></div>${c.img ? `<img class="const-fig" src="constellations/${c.img}.svg" alt="Star pattern of ${esc(c.name)}" width="64" height="64" loading="lazy">` : ""}</div>`).join("") : `<div class="skeleton">None of the major constellations are well placed right then.</div>`;
     return `<div class="sky-wrap">
         <div>${map}<div class="tiny muted" style="text-align:center;margin-top:4px">Hold overhead: north up, east left, centre straight up.</div>${campsHTML(3)}</div>
         <div><div class="sky-when">${esc(whenTxt)}, best placed constellations:</div><div class="const-grid">${list}</div>${moonNote}${risingHTML(rising)}</div>
